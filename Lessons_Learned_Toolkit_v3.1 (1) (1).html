@@ -1,0 +1,1641 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Lessons Learned Toolkit v3.1 — Scoring Criteria &amp; Lesson Register</title>
+<meta name="version" content="3.1"><meta name="date" content="2026-07-29">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0F1419; --ink2:#38454C; --ink3:#69777E;
+  --paper:#E9ECE8; --panel:#F8F9F7; --panel2:#F1F3EF;
+  --rule:#C0C7C1; --rule2:#DDE2DC;
+  --steel:#2E434E; --steel2:#1D2E36;
+  --li:#A8701C; --ll:#2C6B4C; --rej:#8C3A2E; --new:#4A3A7A;
+  --disp:"IBM Plex Sans Condensed","Roboto Condensed","Arial Narrow",sans-serif;
+  --body:"IBM Plex Serif",Georgia,serif;
+  --mono:"IBM Plex Mono",Consolas,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--body);
+  font-size:15.5px;line-height:1.62}
+
+/* ===== masthead ===== */
+header.mast{background:var(--steel);color:#EDF1EE;padding:14px 18px 12px}
+.mi{max-width:1240px;margin:0 auto}
+.dl{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:#9FB4BD;display:flex;flex-wrap:wrap;gap:4px 14px}
+h1.t{font-family:var(--disp);font-weight:700;font-size:clamp(22px,4.4vw,38px);line-height:1.05;
+  margin:8px 0 3px;letter-spacing:-.012em}
+.sub{font-family:var(--disp);font-weight:400;font-size:clamp(12.5px,1.9vw,16px);color:#A9C0C9;
+  margin:0;max-width:66ch}
+
+/* ===== two-layer sticky nav ===== */
+.navwrap{position:sticky;top:0;z-index:70}
+nav.l1{background:var(--steel2)}
+nav.l2{background:var(--steel);border-bottom:1px solid var(--steel2);
+  box-shadow:0 2px 6px rgba(0,0,0,.18)}
+.ni{max-width:1240px;margin:0 auto;display:flex;overflow-x:auto;scrollbar-width:none;
+  -webkit-overflow-scrolling:touch;scroll-snap-type:x proximity}
+.ni::-webkit-scrollbar{display:none}
+nav.l1 button{flex:0 0 auto;background:none;border:0;color:#8AA3AE;font-family:var(--disp);
+  font-weight:700;font-size:12px;letter-spacing:.16em;text-transform:uppercase;padding:9px 16px;
+  cursor:pointer;border-bottom:3px solid transparent;scroll-snap-align:start}
+nav.l1 button[aria-selected=true]{color:#fff;border-bottom-color:var(--li);background:var(--steel)}
+nav.l2 button{flex:0 0 auto;background:none;border:0;border-bottom:3px solid transparent;
+  color:#9FB4BD;font-family:var(--disp);font-weight:600;font-size:13.5px;padding:10px 13px;
+  cursor:pointer;white-space:nowrap;scroll-snap-align:start}
+nav.l2 button[aria-selected=true]{color:#fff;border-bottom-color:var(--li)}
+nav button:hover{color:#E6ECE9}
+nav button .n{font-family:var(--mono);font-size:10px;color:#6E8B96;margin-right:6px}
+nav.l2 button[aria-selected=true] .n{color:var(--li)}
+nav button:focus-visible{outline:2px solid var(--li);outline-offset:-2px}
+.grp{display:none}.grp.on{display:block}
+
+main{max-width:1240px;margin:0 auto;padding:22px 18px 90px}
+section[role=tabpanel]{display:none;animation:f .22s ease}
+section[role=tabpanel].on{display:block}
+@keyframes f{from{opacity:0;transform:translateY(3px)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+h2{font-family:var(--disp);font-weight:700;font-size:clamp(22px,3.4vw,31px);line-height:1.1;
+  margin:6px 0 8px;letter-spacing:-.008em}
+h3{font-family:var(--disp);font-weight:600;font-size:19.5px;margin:30px 0 6px;color:var(--steel)}
+h4{font-family:var(--disp);font-weight:600;font-size:15.5px;margin:18px 0 4px;color:var(--ink2)}
+.lead{font-size:17px;line-height:1.55;max-width:70ch;color:var(--ink2)}
+.eyebrow{font-family:var(--mono);font-size:10px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink3);display:block;margin:28px 0 0}
+p{margin:0 0 12px;max-width:78ch}
+ul,ol{margin:0 0 12px;padding-left:22px;max-width:78ch}
+li{margin:0 0 5px}
+a{color:#1F5D7A;text-decoration:underline;text-underline-offset:2px}
+code,.mono{font-family:var(--mono);font-size:.88em;background:var(--panel2);padding:1px 4px;border-radius:2px}
+
+.panel{background:var(--panel);border:1px solid var(--rule);padding:15px 17px;margin:16px 0}
+.panel.tight{padding:11px 13px}
+.panel>:first-child{margin-top:0}
+.panel.li{border-left:4px solid var(--li)}
+.panel.ll{border-left:4px solid var(--ll)}
+.panel.rej{border-left:4px solid var(--rej)}
+.panel.steel{border-left:4px solid var(--steel)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:840px){.grid2,.grid3{grid-template-columns:1fr}}
+
+/* cards on landing */
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:18px 0}
+@media(max-width:840px){.cards{grid-template-columns:1fr}}
+.card{background:#fff;border:1px solid var(--rule);border-top:5px solid var(--steel);
+  padding:16px 17px}
+.card.a{border-top-color:var(--li)}.card.b{border-top-color:var(--ll)}
+.card .k{font-family:var(--mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink3)}
+.card h3{margin:5px 0 8px;font-size:21px;color:var(--ink)}
+.card p{font-size:14.5px;margin-bottom:10px}
+.card .go{font-family:var(--disp);font-weight:600;font-size:13.5px;background:var(--steel);
+  color:#fff;border:0;padding:8px 14px;cursor:pointer}
+.card .go:hover{background:var(--steel2)}
+
+/* tables */
+.tcap{background:var(--panel2);border:1px solid var(--rule);border-bottom:0;
+  padding:10px 12px 9px;margin:16px 0 0;font-family:var(--disp);font-weight:600;font-size:14.5px;
+  color:var(--steel)}
+.tcap .cid{font-family:var(--mono);font-size:10.5px;color:var(--ink3);letter-spacing:.1em;
+  display:block;text-transform:uppercase;margin-bottom:2px}
+.tw{overflow:auto;border:1px solid var(--rule);margin:16px 0;background:var(--panel);
+  max-height:min(70vh,760px);overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.tcap+.tw{margin-top:0}
+.tw::after{content:"";display:block}
+table{border-collapse:collapse;width:100%;font-size:13.2px}
+
+th{position:sticky;top:0;z-index:20;background:var(--steel);color:#EDF1EE;text-align:left;
+  font-family:var(--disp);font-weight:600;font-size:12px;letter-spacing:.04em;padding:7px 9px;
+  vertical-align:bottom;border-right:1px solid #3E5560}
+td{padding:7px 9px;border-top:1px solid var(--rule2);border-right:1px solid var(--rule2);
+  vertical-align:top}
+tbody tr:nth-child(even){background:var(--panel2)}
+td.num,th.num{font-family:var(--mono);font-size:12px;text-align:right;white-space:nowrap}
+td.id{font-family:var(--mono);font-size:11.5px;font-weight:600;color:var(--steel);white-space:nowrap}
+.nowrap{white-space:nowrap}
+tr.hl{background:#F7EEDC!important}
+
+/* chips */
+.v{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.06em;padding:2px 5px;
+  border-radius:2px;white-space:nowrap;display:inline-block}
+.v-conf{background:#DCEAE1;color:var(--ll);border:1px solid #A9CBB8}
+.v-part{background:#F2E7CF;color:var(--li);border:1px solid #DCC392}
+.v-ref{background:#F1DCD8;color:var(--rej);border:1px solid #D9AFA6}
+.v-uns{background:#E2E5E8;color:#4C5A63;border:1px solid #BFC8CE}
+.v-gap{background:#E3E0EE;color:var(--new);border:1px solid #BDB5D6}
+.t{font-family:var(--mono);font-size:10px;font-weight:600;padding:1px 4px;border:1px solid var(--rule);
+  background:#fff;color:var(--ink2);border-radius:2px}
+.t1{border-color:#2C6B4C;color:#2C6B4C}.t2{border-color:#2E434E;color:#2E434E}
+.t3{border-color:#A8701C;color:#A8701C}.t4{border-color:#8C3A2E;color:#8C3A2E}
+.lang{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;color:var(--ink3);text-transform:uppercase}
+.newtag{font-family:var(--mono);font-size:9px;font-weight:600;letter-spacing:.08em;color:#fff;
+  background:var(--new);padding:1px 4px;border-radius:2px;vertical-align:2px}
+.wpill{font-family:var(--mono);font-size:11.5px;font-weight:600;background:var(--steel);color:#fff;
+  padding:2px 6px;border-radius:2px;white-space:nowrap}
+
+/* collapsibles */
+details{border:1px solid var(--rule);background:var(--panel);margin:14px 0}
+details>summary{cursor:pointer;padding:11px 14px;font-family:var(--disp);font-weight:600;
+  font-size:14.5px;color:var(--steel);list-style:none;display:flex;justify-content:space-between;
+  gap:10px;align-items:center;background:var(--panel2)}
+details>summary::-webkit-details-marker{display:none}
+details>summary::after{content:"＋";font-family:var(--mono);color:var(--li);font-size:15px}
+details[open]>summary::after{content:"−"}
+details>summary:focus-visible{outline:2px solid var(--li);outline-offset:-2px}
+.dbody{padding:2px 14px 14px}
+.dbody>:first-child{margin-top:10px}
+details .tcap{margin-top:12px}
+
+/* formula */
+.fx{font-family:var(--mono);font-size:12.5px;background:#fff;border:1px solid var(--rule);
+  border-left:4px solid var(--steel);padding:11px 14px;margin:12px 0;overflow-x:auto;line-height:1.75}
+.fx .lbl{color:var(--ink3);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;
+  display:block;margin-bottom:5px}
+.fx em{color:var(--li);font-style:normal}
+
+figure{margin:18px 0;border:1px solid var(--rule);background:var(--panel);padding:13px}
+figure svg{display:block;width:100%;height:auto}
+figcaption{font-family:var(--disp);font-size:12.5px;color:var(--ink2);margin-top:10px;
+  padding-top:9px;border-top:1px solid var(--rule2)}
+figcaption b{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--ink3);display:block;margin-bottom:2px}
+
+/* templates */
+.tpl{background:#fff;border:1px solid var(--rule);margin:14px 0}
+.tpl .row{display:grid;grid-template-columns:200px 1fr;border-top:1px solid var(--rule2)}
+.tpl .row:first-child{border-top:0}
+@media(max-width:700px){.tpl .row{grid-template-columns:1fr}}
+.tpl .f{background:var(--panel2);padding:9px 11px;font-family:var(--disp);font-weight:600;
+  font-size:13px;color:var(--steel);border-right:1px solid var(--rule2)}
+.tpl .f small{display:block;font-family:var(--mono);font-size:9.5px;font-weight:400;
+  color:var(--ink3);letter-spacing:.05em;text-transform:uppercase;margin-top:2px}
+.tpl .c{padding:9px 11px;font-size:13.5px}
+.tpl .c .ex{color:var(--ink3);font-style:italic}
+
+/* levels */
+.lvl{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);
+  border:1px solid var(--rule);margin:16px 0}
+@media(max-width:840px){.lvl{grid-template-columns:1fr 1fr}}
+.lvl>div{background:#fff;padding:11px 12px}
+.lvl .r{font-family:var(--mono);font-size:11px;color:var(--ink3);letter-spacing:.08em}
+.lvl .nm{font-family:var(--disp);font-weight:700;font-size:16px;margin:3px 0 4px}
+.lvl .d{font-size:12.6px;color:var(--ink2);line-height:1.4}
+.lvl>div:nth-child(1){border-top:4px solid #B9C2BC}
+.lvl>div:nth-child(2){border-top:4px solid #9AAAA2}
+.lvl>div:nth-child(3){border-top:4px solid var(--li)}
+.lvl>div:nth-child(4){border-top:4px solid #5B8C6E}
+.lvl>div:nth-child(5){border-top:4px solid var(--ll)}
+
+ol.steps{counter-reset:s;list-style:none;padding:0;max-width:none}
+ol.steps>li{counter-increment:s;position:relative;padding:0 0 14px 46px;margin:0}
+ol.steps>li::before{content:counter(s);position:absolute;left:0;top:0;width:31px;height:31px;
+  background:var(--steel);color:#fff;font-family:var(--disp);font-weight:700;font-size:15px;
+  display:flex;align-items:center;justify-content:center}
+ol.steps>li b{font-family:var(--disp);font-size:16px}
+
+ol.bib{list-style:none;padding:0;max-width:none}
+ol.bib li{border-top:1px solid var(--rule2);padding:9px 0;margin:0;font-size:13.4px;
+  display:grid;grid-template-columns:56px 1fr;gap:12px}
+ol.bib li:first-child{border-top:0}
+ol.bib .bid{font-family:var(--mono);font-size:11px;color:var(--ink3);padding-top:2px}
+ol.bib .meta{margin-top:3px;display:flex;gap:7px;flex-wrap:wrap;align-items:center}
+
+.adr{border:1px solid var(--rule);background:#fff;margin:14px 0}
+.adr .h{background:var(--panel2);padding:9px 13px;border-bottom:1px solid var(--rule);
+  display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.adr .h .aid{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--steel);letter-spacing:.08em}
+.adr .h .at{font-family:var(--disp);font-weight:600;font-size:15px}
+.adr .b{padding:11px 13px}
+.adr .b dl{margin:0;display:grid;grid-template-columns:112px 1fr;gap:4px 12px;font-size:13.4px}
+@media(max-width:640px){.adr .b dl{grid-template-columns:1fr}}
+.adr .b dt{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink3);padding-top:3px}
+.adr .b dd{margin:0}
+.anchor{font-family:var(--mono);font-size:10.5px;color:var(--ink3)}
+.foot{border-top:1px solid var(--rule);margin-top:44px;padding-top:16px;font-size:12.5px;
+  color:var(--ink3);font-family:var(--disp)}
+@media print{
+  .navwrap{display:none}
+  section[role=tabpanel],.grp{display:block!important;break-before:page}
+  th{position:static}details{border:0}
+  .tw{max-height:none;overflow:visible}
+  .tcap{break-after:avoid}details>summary{background:none}
+  .dbody{display:block!important;padding:0}
+  body{background:#fff;font-size:10.5pt}
+}
+</style>
+</head>
+<body>
+
+<header class="mast">
+ <div class="mi">
+  <div class="dl"><span>LL-TK/3.1</span><span>2026-07-29</span><span>K. Valickas</span>
+  <span>Two lists · one process</span></div>
+  <h1 class="t">Lessons Learned Toolkit</h1>
+  <p class="sub">A scoring list students use to grade and improve their own lessons, and a register
+  spec for logging each one. Two different lists, one workflow.</p>
+ </div>
+</header>
+
+<div class="navwrap">
+<nav class="l1" role="tablist" aria-label="Layer">
+ <div class="ni">
+  <button role="tab" aria-selected="true" data-grp="g1" id="g1b">Use the toolkit</button>
+  <button role="tab" aria-selected="false" data-grp="g2" id="g2b">Reference &amp; provenance</button>
+ </div>
+</nav>
+<nav class="l2">
+ <div class="ni grp on" id="g1nav" role="tablist" aria-label="Practice sections">
+  <button role="tab" aria-selected="true"  aria-controls="p0" id="b0"><span class="n">00</span>Start here</button>
+  <button role="tab" aria-selected="false" aria-controls="p1" id="b1"><span class="n">01</span>Scoring criteria · 20</button>
+  <button role="tab" aria-selected="false" aria-controls="p2" id="b2"><span class="n">02</span>Lesson register · 30</button>
+  <button role="tab" aria-selected="false" aria-controls="p3" id="b3"><span class="n">03</span>Using both</button>
+  <button role="tab" aria-selected="false" aria-controls="p4" id="b4"><span class="n">04</span>Templates</button>
+  <button role="tab" aria-selected="false" aria-controls="p5" id="b5"><span class="n">05</span>Process</button>
+ </div>
+ <div class="ni grp" id="g2nav" role="tablist" aria-label="Reference sections">
+  <button role="tab" aria-selected="false" aria-controls="pA" id="bA"><span class="n">A</span>How the ranking was derived</button>
+  <button role="tab" aria-selected="false" aria-controls="pB" id="bB"><span class="n">B</span>Decision records</button>
+  <button role="tab" aria-selected="false" aria-controls="pC" id="bC"><span class="n">C</span>Source audit</button>
+  <button role="tab" aria-selected="false" aria-controls="pD" id="bD"><span class="n">D</span>Bibliography</button>
+ </div>
+</nav>
+</div>
+
+<main>
+
+<!-- ================= 00 START HERE ================= -->
+<section role="tabpanel" id="p0" aria-labelledby="b0" class="on">
+<h2>Start here</h2>
+<p class="lead">This toolkit contains two separate lists. They are not variants of each other and
+they are not used at the same moment. Confusing them is the single most common way this material
+gets misapplied.</p>
+
+<div class="cards">
+ <div class="card a">
+  <div class="k">List one · §01</div>
+  <h3>20 scoring criteria</h3>
+  <p><b>You pick 8–12 of them, once.</b> Then you use them to score any lesson you have already
+  written, get a number out of 100, and work on raising it. The list is ranked so you know which
+  criteria are worth picking.</p>
+  <p><b>Used:</b> after a lesson exists, repeatedly, as a self-assessment loop.<br>
+  <b>Produces:</b> a score and a shortlist of what to fix.</p>
+  <button class="go" data-goto="p1">Open the 20 criteria →</button>
+ </div>
+ <div class="card b">
+  <div class="k">List two · §02</div>
+  <h3>30 register columns</h3>
+  <p><b>You fill these in for every single lesson.</b> They are the data fields of the register —
+  what happened, when, who can act, what changes, what evidence exists, what state the lesson is
+  in. Nothing here is scored.</p>
+  <p><b>Used:</b> while capturing and progressing each lesson.<br>
+  <b>Produces:</b> a complete, searchable, actionable entry.</p>
+  <button class="go" data-goto="p2">Open the 30 columns →</button>
+ </div>
+</div>
+
+<div class="panel steel">
+<h4>The one-line distinction</h4>
+<p style="margin:0"><b>The 30 columns are what a lesson <i>is</i>. The 20 criteria are how good it
+turned out.</b> A register row can be complete and still score badly — that is exactly the
+situation the scoring list is built to detect. Filling all 30 columns is necessary and not
+sufficient.</p>
+</div>
+
+<h3>Five-minute quick start</h3>
+<ol class="steps">
+<li><b>Set up the register.</b> Take the Lean 12 configuration from §02 and add columns as you
+need them. Do not start with all 34.</li>
+<li><b>Write lessons into it</b> using the capture template in §04. One trigger, one causal logic,
+one action set per row.</li>
+<li><b>Choose your scoring set.</b> Take the default top 12 from §01, or swap within the amber tie
+band. Write your choice down and stop changing it — a score is only comparable against
+itself.</li>
+<li><b>Score your existing lessons</b> 0–6 per criterion. Compute the index. Expect a low number
+the first time; almost everyone starts in the Diary or Observation band.</li>
+<li><b>Fix the two lowest-scoring criteria and re-score.</b> That loop is the whole point. §01 has
+a quick-win order so you spend effort where the weight is.</li>
+</ol>
+
+<h3>What is in this document</h3>
+<div class="tcap"><span class="cid">Index</span>Ten sections across two layers</div><div class="tw"><table>
+<thead><tr><th style="min-width:52px">§</th><th style="min-width:180px">Section</th>
+<th style="min-width:300px">Contains</th><th style="min-width:120px">Read it when</th></tr></thead>
+<tbody>
+<tr><td class="id">00</td><td>Start here</td><td>This page. The two-list distinction, quick start,
+index, glossary.</td><td>First.</td></tr>
+<tr class="hl"><td class="id">01</td><td><b>Scoring criteria · 20</b></td><td>The ranked list with
+weights and 0–6 anchors, the default 12, the tie band, level bands, quick-win order, the scoring
+sheet, and how to raise each criterion by one level.</td><td>Every time you improve a
+lesson.</td></tr>
+<tr class="hl"><td class="id">02</td><td><b>Lesson register · 30</b></td><td>All 34 columns with
+requirement level, Lean 12 / Strong 18 / PMO 34 configurations, taxonomy construction, tool
+guidance.</td><td>When setting up, and while capturing.</td></tr>
+<tr><td class="id">03</td><td>Using both</td><td>The combined workflow diagram, where scoring sits
+relative to capture, the entry gates, the cadence table.</td><td>Once, to see how the pieces
+fit.</td></tr>
+<tr><td class="id">04</td><td>Templates</td><td>Lesson capture template, Potential Best Practice,
+action plan, three worked weak→strong corrections.</td><td>While writing.</td></tr>
+<tr><td class="id">05</td><td>Process</td><td>The two-phase process, endorsement gate, nine-state
+status machine, roles, capability model, information maturity.</td><td>When lessons need to
+actually get actioned.</td></tr>
+<tr><td class="id">A</td><td>How the ranking was derived</td><td>Meta-criteria, SWARA weights, the
+20×5 matrix, TOPSIS arithmetic, sensitivity analysis, reproduction code. All collapsed by
+default.</td><td>Only if you want to contest the ranking.</td></tr>
+<tr><td class="id">B</td><td>Decision records</td><td>17 ADRs in Nygard format covering every
+design decision and every change from v1.0.</td><td>When you ask "why is it like
+this?"</td></tr>
+<tr><td class="id">C</td><td>Source audit</td><td>Claim-by-claim verification of the material this
+was built on, with verdicts and disconfirming evidence.</td><td>When you need to defend a
+claim.</td></tr>
+<tr><td class="id">D</td><td>Bibliography</td><td>68 entries, tiered, hyperlinked, languages
+marked, limitations declared.</td><td>When citing.</td></tr>
+</tbody></table></div>
+
+<h3>Why bother — the four numbers</h3>
+<div class="grid2">
+<div class="panel tight">
+<p style="margin:0;font-size:14px"><b>11.7%</b> of organisations that <i>have</i> a formal lessons
+procedure said it was closely adhered to (n = 522). <b>About half</b> of surveyed organisations
+were dissatisfied with their lessons results (n ≈ 70). The default outcome is failure.</p>
+</div>
+<div class="panel tight">
+<p style="margin:0;font-size:14px"><b>20–25%</b> performance improvement from properly conducted
+structured debriefs (46 studies). <b>d = .65</b> effect of if-then plans on goal attainment (94
+tests). What works is the debrief and the if-then action format — not the spreadsheet.</p>
+</div>
+</div>
+<p class="anchor">Sources and verification in §C and §D. Everything asserted in this toolkit is
+traceable; nothing is asserted that could not be traced.</p>
+
+<h3>Glossary</h3>
+<div class="tcap"><span class="cid">Terms</span>Used consistently throughout</div><div class="tw"><table>
+<thead><tr><th style="min-width:160px">Term</th><th style="min-width:400px">Meaning here</th></tr></thead>
+<tbody>
+<tr><td><b>Observation</b></td><td>A factual record that something differed from what was
+expected. Not yet a lesson.</td></tr>
+<tr><td><b>Lesson Identified</b></td><td>An observation with analysis, established contributing
+factors, a recommended action, <i>and a named authority who can resource it</i>.</td></tr>
+<tr><td><b>Lesson Learned</b></td><td>A confirmed improvement resulting from implementing that
+action. Validation, not documentation, is what promotes an entry to this state.</td></tr>
+<tr><td><b>Potential Best Practice</b></td><td>The positive-outcome equivalent of a Lesson
+Identified. Becomes a Best Practice only after it is compared against alternatives.</td></tr>
+<tr><td><b>Tasking authority</b></td><td>The role that can approve an action <i>and commit
+resources</i>. Distinct from the owner, who merely executes.</td></tr>
+<tr><td><b>Action body</b></td><td>The role or team that executes the action and reports
+progress.</td></tr>
+<tr><td><b>LQI</b></td><td>Lesson Quality Index, 0–100. The weighted score from §01.</td></tr>
+<tr><td><b>Tie band</b></td><td>Criteria ranked 10–14, whose order is not stable under weight
+perturbation. Substitute freely within it.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ================= 01 SCORING CRITERIA ================= -->
+<section role="tabpanel" id="p1" aria-labelledby="b1">
+<h2>The 20 scoring criteria</h2>
+<p class="lead">Pick 8–12. Score any lesson 0–6 on each. Get a number out of 100. Raise it. The
+list is ranked so that picking from the top gives you the most improvement per unit of effort —
+and the weights are already calculated for the default twelve, so you can start scoring
+immediately.</p>
+
+<div class="panel li">
+<h4>How the weights work when you pick your own set</h4>
+<p style="margin:0">The <span class="wpill">w</span> column is pre-computed for the <b>default top
+12</b>. If you choose a different set, renormalise: <span class="mono">w<sub>i</sub> =
+C*<sub>i</sub> ÷ (sum of C* across the criteria you chose)</span>. The C* column is there for
+exactly that. This is the step that makes any 8–12 subset usable.</p>
+</div>
+
+<h3>Default set — the top 12</h3>
+<div class="tcap"><span class="cid">Table 1 — the scoring list</span>Score each criterion 0–6 · amber rows are the tie band, substitute freely inside it</div><div class="tw"><table>
+<thead><tr><th class="num">#</th><th>ID</th><th style="min-width:270px">Criterion</th>
+<th class="num">w</th><th class="num">C*</th><th style="min-width:180px">Scores 0–1 when</th>
+<th style="min-width:210px">Scores 5–6 when</th><th style="min-width:200px">To gain a level</th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="id">C03</td><td><b>Tasking authority named</b> <span class="newtag">NEW</span><br><span style="font-size:12.6px;color:#38454C">Is there a role that can <i>commit resources</i> and task someone — not just a person who cares?</span></td><td class="num"><span class="wpill">0.104</span></td><td class="num">0.840</td><td>No owner, or a personal name with no authority to release effort.</td><td>Names a tasking authority who can approve and resource, plus the action body that will execute. Roles, not individuals.</td><td style="font-size:12.6px">Add one line: <span class='mono'>Authority: Head of PMO · Action body: release manager</span>. Thirty seconds for the highest weight in the set.</td></tr><tr><td class="num">2</td><td class="id">C02</td><td><b>Trigger specificity</b><br><span style="font-size:12.6px;color:#38454C">Is it clear <i>when</i> this fires again — as an if-then condition, not a topic?</span></td><td class="num"><span class="wpill">0.097</span></td><td class="num">0.787</td><td>Applies to “projects” generally. No condition, phase or signal.</td><td>States phase, event, warning sign or numeric threshold in if-then form.</td><td style="font-size:12.6px">Rewrite the opening as “If … then …”. If you cannot name the condition, you have written a complaint, not a lesson.</td></tr><tr><td class="num">3</td><td class="id">C01</td><td><b>Actionability / atomicity</b><br><span style="font-size:12.6px;color:#38454C">Could an average PM execute the steps without inventing the missing process?</span></td><td class="num"><span class="wpill">0.096</span></td><td class="num">0.778</td><td>Abstract verbs: improve, align, invent, communicate better.</td><td>Verb + object + condition + tool or location + expected evidence. Each step independently executable.</td><td style="font-size:12.6px">Split every step until each one starts with an action verb and names where it happens. Delete any step you cannot picture someone doing.</td></tr><tr><td class="num">4</td><td class="id">C12</td><td><b>Process integration</b><br><span style="font-size:12.6px;color:#38454C">Does it say <i>where</i> the change gets embedded so it outlives this project?</span></td><td class="num"><span class="wpill">0.089</span></td><td class="num">0.719</td><td>“Remember next time.” No artefact named.</td><td>Names the template, checklist, definition of done, workflow, gate or onboarding step that changes.</td><td style="font-size:12.6px">Name one artefact and one path. “Added to the release checklist at &lt;path&gt;.”</td></tr><tr><td class="num">5</td><td class="id">C07</td><td><b>Evidence &amp; source traceability</b><br><span style="font-size:12.6px;color:#38454C">Is it anchored to project records rather than recollection?</span></td><td class="num"><span class="wpill">0.087</span></td><td class="num">0.706</td><td>“I felt that…” No artefact referenced.</td><td>Links to issue log, ticket, defect report, test result, retro note, KPI, change request or audit finding.</td><td style="font-size:12.6px">Paste two links. This is the cheapest score in the set after the authority line.</td></tr><tr><td class="num">6</td><td class="id">C09</td><td><b>Measurable success criterion</b><br><span style="font-size:12.6px;color:#38454C">Does it define how a future user knows the action worked?</span></td><td class="num"><span class="wpill">0.086</span></td><td class="num">0.699</td><td>No success test of any kind.</td><td>States a target metric, acceptance test or check, with a review point.</td><td style="font-size:12.6px">Add one sentence beginning “We will know this worked when …” and a date.</td></tr><tr><td class="num">7</td><td class="id">C11</td><td><b>Preventive + corrective completeness</b><br><span style="font-size:12.6px;color:#38454C">Does it cover both the immediate fix and the mechanism that stops recurrence?</span></td><td class="num"><span class="wpill">0.082</span></td><td class="num">0.662</td><td>Describes only what happened, or only the one-off fix.</td><td>Immediate correction and future prevention, marked separately, each with a responsible role and review date.</td><td style="font-size:12.6px">Label your actions <span class='mono'>[FIX]</span> and <span class='mono'>[PREVENT]</span>. If nothing is labelled PREVENT, it will recur.</td></tr><tr><td class="num">8</td><td class="id">C17</td><td><b>Decision-rule clarity</b><br><span style="font-size:12.6px;color:#38454C">Are thresholds numeric, so escalation is not a judgement call?</span></td><td class="num"><span class="wpill">0.078</span></td><td class="num">0.629</td><td>“Escalate if needed.”</td><td>“If vendor response exceeds 2 business days twice, escalate to the supplier manager.”</td><td style="font-size:12.6px">Put a number in the sentence. Any number you can defend beats no number.</td></tr><tr><td class="num">9</td><td class="id">C16</td><td><b>Risk conversion</b><br><span style="font-size:12.6px;color:#38454C">Is the lesson turned into a future risk entry with trigger, response and owner?</span></td><td class="num"><span class="wpill">0.075</span></td><td class="num">0.609</td><td>No link to any risk process.</td><td>Becomes a risk statement with early-warning trigger, planned response, owner and a named review point.</td><td style="font-size:12.6px">Copy the trigger from C02 into the risk register and reference the risk ID here.</td></tr><tr class="hl"><td class="num">10</td><td class="id">C13</td><td><b>Retrievability</b><br><span style="font-size:12.6px;color:#38454C">Could someone find this among four hundred entries without knowing it exists?</span></td><td class="num"><span class="wpill">0.072</span></td><td class="num">0.584</td><td>No tags, no category, no search terms.</td><td>Carries the required metadata plus controlled-vocabulary terms: phase, domain, IT area, failure mode, severity.</td><td style="font-size:12.6px">Tag it. Use the facet list from §02 — do not invent new tags per entry.</td></tr><tr class="hl"><td class="num">11</td><td class="id">C10</td><td><b>Context sufficiency</b><br><span style="font-size:12.6px;color:#38454C">Is there enough context to judge whether this transfers?</span></td><td class="num"><span class="wpill">0.070</span></td><td class="num">0.567</td><td>No project type, scale, team shape, delivery mode or constraint.</td><td>IT domain, delivery mode, phase, team and vendor shape, plus stated applicability limits.</td><td style="font-size:12.6px">Add one line of context and one line beginning “This may not apply when …”</td></tr><tr class="hl"><td class="num">12</td><td class="id">C08</td><td><b>Impact quantification</b><br><span style="font-size:12.6px;color:#38454C">Is the consequence measured, or at least concretely bounded?</span></td><td class="num"><span class="wpill">0.066</span></td><td class="num">0.535</td><td>“Bad”, “delayed”, “problematic”.</td><td>States cost, time, quality, rework, risk or stakeholder effect with a figure or defensible range.</td><td style="font-size:12.6px">Replace the adjective with a number or a range. “Roughly 8–12 working days” is acceptable; “significant” is not.</td></tr></tbody>
+<tfoot><tr style="background:var(--panel2);font-weight:600">
+<td colspan="3" style="text-align:right;padding-right:10px">Σ w</td>
+<td class="num">1.000</td><td class="num">8.116</td><td colspan="3"></td></tr></tfoot>
+</table></div>
+
+<details>
+<summary>The other 8 candidates — swap these in if they fit your context</summary>
+<div class="dbody">
+<p>Ranked 13–20. They are not weaker criteria in the abstract; they rank lower because they are
+harder to score consistently or cost more attention per point of value. Two of them are worth
+deliberate attention: <b>C04 contributing-factor depth</b> is the criterion practitioners feel
+most strongly about and it ranks 14th precisely because raters disagree about causal depth — it is
+therefore handled as a <i>gate</i> in §03 rather than dropped. <b>C18 stakeholder validation</b>
+ranks last on cost alone; keep it if your students work in teams, because peer review is the
+cheapest quality mechanism you have.</p>
+<div class="tw"><table>
+<thead><tr><th class="num">#</th><th>ID</th><th style="min-width:270px">Criterion</th>
+<th class="num">w</th><th class="num">C*</th><th style="min-width:180px">Scores 0–1 when</th>
+<th style="min-width:210px">Scores 5–6 when</th><th style="min-width:200px">To gain a level</th></tr></thead>
+<tbody><tr class="hl"><td class="num">13</td><td class="id">C20</td><td><b>Reuse feedback loop</b><br><span style="font-size:12.6px;color:#38454C">Does the entry track its own progress to a validated Lesson Learned?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.532</td><td>No follow-up status; the entry ends at “written”.</td><td>Status advances through the machine in §05 and records the validation outcome, including rejection with a reason.</td><td style="font-size:12.6px">Set the status field and revisit it. An entry stuck at “written” for a month is a dead entry.</td></tr><tr class="hl"><td class="num">14</td><td class="id">C04</td><td><b>Contributing-factor depth</b> <span class="newtag">REFRAMED</span><br><span style="font-size:12.6px;color:#38454C">Does it explain <i>why</i>, across more than one contributing factor?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.522</td><td>Symptom restated as cause: “testing was late”.</td><td>Maps several contributing factors and their interaction; does not collapse to one distal cause.</td><td style="font-size:12.6px">List three factors and how they interact. Also handled by gate G5 in §03.</td></tr><tr><td class="num">15</td><td class="id">C14</td><td><b>Reusability without the author</b><br><span style="font-size:12.6px;color:#38454C">Could a different PM apply this without interviewing you?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.475</td><td>Personal note, local jargon, unstated assumptions.</td><td>Standalone guidance with assumptions and limits declared; no undefined shorthand.</td><td style="font-size:12.6px">Hand it to someone outside the project and watch where they stop reading.</td></tr><tr><td class="num">16</td><td class="id">C15</td><td><b>Prior-lesson check</b> <span class="newtag">NEW</span><br><span style="font-size:12.6px;color:#38454C">Was the register searched before this entry was written?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.460</td><td>No indication the register was consulted.</td><td>States the search performed and either links the related prior entry or records that none exists.</td><td style="font-size:12.6px">One line: “Searched &lt;terms&gt;; nearest prior entry LL-042; distinct because …”</td></tr><tr><td class="num">17</td><td class="id">C06</td><td><b>Systemic framing</b> <span class="newtag">NEW</span><br><span style="font-size:12.6px;color:#38454C">Is this a system issue rather than one person's mistake?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.428</td><td>Attributes the outcome to an individual's failure or attitude.</td><td>Describes conditions, constraints and design that made the outcome likely. No named individual is the cause.</td><td style="font-size:12.6px">Remove every name. If the sentence collapses without the name, rewrite the analysis.</td></tr><tr><td class="num">18</td><td class="id">C05</td><td><b>Rival-explanation check</b> <span class="newtag">NEW</span><br><span style="font-size:12.6px;color:#38454C">Were competing explanations considered and ruled out?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.370</td><td>One explanation offered; alternatives not addressed.</td><td>States at least one rival explanation and the evidence that discriminates against it.</td><td style="font-size:12.6px">Add “We also considered X, and rejected it because …”</td></tr><tr><td class="num">19</td><td class="id">C19</td><td><b>Positive / negative balance</b><br><span style="font-size:12.6px;color:#38454C">Does it record what to repeat as well as what to avoid?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.366</td><td>Complaint only, or praise only.</td><td>Identifies what to sustain and what to change. A success is written as a Potential Best Practice, not a compliment.</td><td style="font-size:12.6px">If it is a success, move it to template LL-02 in §04.</td></tr><tr><td class="num">20</td><td class="id">C18</td><td><b>Stakeholder validation</b><br><span style="font-size:12.6px;color:#38454C">Was it checked with the people it describes?</span></td><td class="num" style="color:#8A9498">—</td><td class="num">0.213</td><td>Single-person opinion, unreviewed.</td><td>Validated by the PM plus at least one affected role: user, QA, developer, vendor, sponsor, support.</td><td style="font-size:12.6px">Ask one affected person to read it and record that they did.</td></tr></tbody></table></div>
+</div>
+</details>
+
+<h3>The 0–6 scale</h3>
+<div class="tcap"><span class="cid">Table 2 — anchors</span>Same seven points for every criterion</div><div class="tw"><table>
+<thead><tr><th class="num" style="min-width:44px">Score</th><th style="min-width:130px">Level</th>
+<th style="min-width:280px">What the text does</th><th style="min-width:240px">Illustration on C01</th></tr></thead>
+<tbody>
+<tr><td class="num">0</td><td>Absent</td><td>Not addressed, or addressed by a word with no content.</td><td><i>"Communication was bad."</i></td></tr>
+<tr><td class="num">1</td><td>Abstract</td><td>A direction exists but nothing is executable.</td><td><i>"Improve communication."</i></td></tr>
+<tr><td class="num">2</td><td>Directional</td><td>Names a thing to do but not who, when, where or how.</td><td><i>"Create a stakeholder taxonomy."</i></td></tr>
+<tr><td class="num">3</td><td>Executable, incomplete</td><td>Executable by your own team; missing context, evidence or condition.</td><td><i>"Create stakeholder groups in a spreadsheet before kickoff."</i></td></tr>
+<tr><td class="num">4</td><td>Complete</td><td>Atomic steps plus context and a named role.</td><td><i>"Before kickoff the PM creates a stakeholder register with columns X/Y/Z; the PO validates the top ten."</i></td></tr>
+<tr><td class="num">5</td><td>Reusable</td><td>Adds trigger and success evidence; a stranger could run it.</td><td><i>"… evidence = approved register signed by the PO before sprint 1."</i></td></tr>
+<tr><td class="num">6</td><td>Institutionalised</td><td>Reusable <i>and</i> already embedded in a named artefact, with a validation result recorded.</td><td><i>"Trigger: &gt;5 external teams. Uses template LL-STK-01 at &lt;path&gt;. Validated: no unassigned approvers in two subsequent projects."</i></td></tr>
+</tbody></table></div>
+<p class="anchor">Seven points, not five or ten: rater reliability stops improving at around seven
+categories, and one instrument needs one scale. Crosswalk to 0–5 and 1–10 is in §B, ADR-06.</p>
+
+<h3>Your score</h3>
+<div class="fx"><span class="lbl">Lesson Quality Index</span>
+<b>LQI = 100 × ( Σ <em>w<sub>i</sub></em> × <em>s<sub>i</sub></em> ) ÷ 6</b>
+&nbsp;&nbsp;where <em>s<sub>i</sub></em> is your 0–6 score on criterion <em>i</em>
+<br><br><span class="lbl">Worked example — default 12, a typical first attempt</span>
+C03=0 · C02=1 · C01=2 · C12=1 · C07=0 · C09=0 · C11=2 · C17=1 · C16=0 · C13=1 · C10=3 · C08=1<br>
+Σ w·s = 0.1035(0)+0.0970(1)+0.0959(2)+0.0886(1)+0.0870(0)+0.0861(0)+0.0816(2)+0.0775(1)+0.0750(0)+0.0719(1)+0.0699(3)+0.0659(1) = <b>0.8098</b><br>
+<b>LQI = 100 × 0.8098 ÷ 6 = 13.5 → Diary band.</b> Adding just the authority line, two evidence
+links and one success sentence moves this above 40 without touching the analysis.
+</div>
+
+<div class="lvl">
+ <div><div class="r">0–29</div><div class="nm">Diary</div><div class="d">A record of a feeling. Return it. Not a lesson yet.</div></div>
+ <div><div class="r">30–49</div><div class="nm">Observation</div><div class="d">Factual and useful as raw material. Do not act on it.</div></div>
+ <div><div class="r">50–69</div><div class="nm">Candidate</div><div class="d">Analysable. Send it through the causal gate in §03.</div></div>
+ <div><div class="r">70–84</div><div class="nm">Lesson Identified</div><div class="d">Ready for endorsement and tasking. Someone can act.</div></div>
+ <div><div class="r">85–100</div><div class="nm">Institutional</div><div class="d">Fit to embed in a template or checklist as it stands.</div></div>
+</div>
+
+<h3>Quick-win order — where to spend effort first</h3>
+<p>Weight divided by how expensive the criterion is to satisfy. Work down this list and the score
+climbs fastest. The first two items together are worth 0.18 of the total weight and take under two
+minutes.</p>
+<div class="tcap"><span class="cid">Table 3 — effort-ranked improvement order</span>Sorted by w ÷ cost, descending. The <b>w</b> column is deliberately not in order — that is the point.</div><div class="tw"><table><thead><tr><th class="num">Do</th><th>ID</th><th style="min-width:180px">Criterion</th><th class="num">w</th><th class="num">cost</th><th class="num">w ÷ cost</th><th style="min-width:290px">The move</th></tr></thead><tbody><tr><td class="num">1</td><td class="id">C03</td><td>Tasking authority named</td><td class="num">0.103</td><td class="num">2</td><td class="num"><b>0.0517</b></td><td style="font-size:12.6px">Add one line: <span class="mono">Authority: Head of PMO · Action body: release manager</span>.</td></tr><tr><td class="num">2</td><td class="id">C13</td><td>Retrievability</td><td class="num">0.072</td><td class="num">2</td><td class="num"><b>0.0360</b></td><td style="font-size:12.6px">Tag it using the facet list from §02. Do not invent new tags per entry.</td></tr><tr><td class="num">3</td><td class="id">C02</td><td>Trigger specificity</td><td class="num">0.097</td><td class="num">3</td><td class="num"><b>0.0323</b></td><td style="font-size:12.6px">Rewrite the opening as “If … then …”. If you cannot name the condition, you have a complaint.</td></tr><tr><td class="num">4</td><td class="id">C07</td><td>Evidence &amp; source traceability</td><td class="num">0.087</td><td class="num">3</td><td class="num"><b>0.0290</b></td><td style="font-size:12.6px">Paste two links to the records the claim rests on.</td></tr><tr><td class="num">5</td><td class="id">C17</td><td>Decision-rule clarity</td><td class="num">0.077</td><td class="num">3</td><td class="num"><b>0.0258</b></td><td style="font-size:12.6px">Put a number in the sentence. Any number you can defend beats no number.</td></tr><tr><td class="num">6</td><td class="id">C01</td><td>Actionability / atomicity</td><td class="num">0.096</td><td class="num">4</td><td class="num"><b>0.0240</b></td><td style="font-size:12.6px">Split every step until each starts with an action verb and names where it happens.</td></tr><tr><td class="num">7</td><td class="id">C10</td><td>Context sufficiency</td><td class="num">0.070</td><td class="num">3</td><td class="num"><b>0.0233</b></td><td style="font-size:12.6px">Add one line of context and one beginning “This may not apply when …”</td></tr><tr><td class="num">8</td><td class="id">C12</td><td>Process integration</td><td class="num">0.089</td><td class="num">4</td><td class="num"><b>0.0221</b></td><td style="font-size:12.6px">Name one artefact and one path. “Added to the release checklist at &lt;path&gt;.”</td></tr><tr><td class="num">9</td><td class="id">C09</td><td>Measurable success criterion</td><td class="num">0.086</td><td class="num">4</td><td class="num"><b>0.0215</b></td><td style="font-size:12.6px">Add one sentence beginning “We will know this worked when …” plus a date.</td></tr><tr><td class="num">10</td><td class="id">C11</td><td>Preventive + corrective completeness</td><td class="num">0.082</td><td class="num">4</td><td class="num"><b>0.0204</b></td><td style="font-size:12.6px">Label your actions <span class="mono">[FIX]</span> and <span class="mono">[PREVENT]</span>.</td></tr><tr><td class="num">11</td><td class="id">C16</td><td>Risk conversion</td><td class="num">0.075</td><td class="num">4</td><td class="num"><b>0.0187</b></td><td style="font-size:12.6px">Copy the C02 trigger into the risk register and reference the risk ID here.</td></tr><tr><td class="num">12</td><td class="id">C08</td><td>Impact quantification</td><td class="num">0.066</td><td class="num">4</td><td class="num"><b>0.0165</b></td><td style="font-size:12.6px">Replace the adjective with a number or a defensible range.</td></tr></tbody></table></div>
+
+<h3>The self-scoring loop</h3>
+<ol class="steps">
+<li><b>Freeze your set.</b> Write down which 8–12 criteria you chose and the weights. Changing the
+set mid-course makes your scores incomparable, which destroys the only thing that makes this
+worth doing.</li>
+<li><b>Score cold.</b> Score a lesson you wrote weeks ago, before improving anything. That is your
+baseline. Do not score a lesson you are still writing — you will score the intention, not the
+text.</li>
+<li><b>Take the two lowest.</b> Not the two easiest. Read the "scores 5–6 when" cell and the "to
+gain a level" cell for each.</li>
+<li><b>Rewrite and re-score.</b> Record both numbers. The delta is the learning, not the
+absolute.</li>
+<li><b>Stop at your band target.</b> Chasing 100 on a minor lesson is waste. A trivial lesson at
+70 and a critical one at 90 is a better allocation than everything at 80.</li>
+</ol>
+
+<div class="panel">
+<h4>Peer scoring, if you want it</h4>
+<p style="margin:0">Two students scoring the same lesson independently and comparing is a
+substantial upgrade on self-scoring, because self-scoring rewards knowing what you meant. Rule:
+where two scores differ by 2 or more points, discuss and record the agreed value — never the
+average. If you intend to attach marks to these numbers rather than use them formatively, read
+ADR-14 in §B first; there is a reliability protocol that must run before the scores can carry
+a grade.</p>
+</div>
+
+<details>
+<summary>Where these weights come from — one paragraph, full derivation in §A</summary>
+<div class="dbody">
+<p>The 20 criteria were treated as alternatives in a selection decision and scored against five
+meta-criteria: implementation leverage, grading observability, IT transferability,
+recurrence-prevention power, and rater cost. The meta-criteria were weighted with SWARA
+(0.250, 0.228, 0.180, 0.198, 0.144 — summing to exactly 1.00000), and the criteria were ranked by
+TOPSIS closeness. Sensitivity analysis across five weight perturbations leaves the rank-1
+criterion invariant and displaces nothing by more than four places, with positions 10–14 forming
+the tie band marked amber above. <b>The full matrix, the arithmetic and runnable code are in
+§A</b> — deliberately placed there rather than here, because you do not need any of it to use the
+list, and you should be able to contest it without wading through it.</p>
+</div>
+</details>
+</section>
+
+<!-- ================= 02 REGISTER ================= -->
+<section role="tabpanel" id="p2" aria-labelledby="b2">
+<h2>The 30 lesson register columns</h2>
+<p class="lead">Fill these in for every lesson. This is the data structure of the register, not a
+scoring list — nothing on this page is scored. Thirty columns from the original specification,
+plus four that were missing, each marked with whether it is required to move the entry forward.</p>
+
+<div class="panel ll">
+<h4>Start with 12, not 34</h4>
+<p style="margin:0">Nobody fills 34 columns on their first lesson. Take the <b>Lean 12</b> below,
+run it for a month, and add columns when you notice something you cannot answer. The three
+configurations are cumulative — Strong 18 contains Lean 12, PMO 34 contains Strong 18.</p>
+</div>
+
+<div class="grid3">
+<div class="panel tight"><h4>Lean · 12 columns</h4>
+<p style="font-size:13px;margin:0">1 Lesson ID · 2 Date captured · 4 Project &amp; phase ·
+8 Category / facet · 11 Situation · 13 What happened · 14 Contributing factors · 16 Impact ·
+18 Trigger · 19 Actionable steps · <b>21 Tasking authority</b> · 25 Status</p>
+<p class="anchor" style="margin-top:8px">Use for: a single team, a course exercise, a first
+month.</p></div>
+<div class="panel tight"><h4>Strong · 18 columns</h4>
+<p style="font-size:13px;margin:0">Lean 12, plus: 20 Recommendation · 22 Action body ·
+26 Evidence / source · 27 Related risk or issue ID · 29 Applicability limits ·
+32 Validation result</p>
+<p class="anchor" style="margin-top:8px">Use for: a real project that intends to act on its
+lessons.</p></div>
+<div class="panel tight"><h4>PMO repository · 34 columns</h4>
+<p style="font-size:13px;margin:0">Everything in Table 4.</p>
+<p class="anchor" style="margin-top:8px">Use for: reuse across projects, cohorts or years. Above
+roughly three contributing teams a spreadsheet stops working — you need one searchable store with
+relations, not five copies.</p></div>
+</div>
+
+<h3>Full specification</h3>
+<div class="tcap"><span class="cid">Table 4 — the register</span>34 columns · L = in Lean 12 · S = in Strong 18 · all = PMO</div><div class="tw"><table>
+<thead><tr><th class="num">#</th><th style="min-width:175px">Column</th><th style="min-width:76px">Set</th>
+<th style="min-width:90px">Required</th><th style="min-width:270px">What goes in it, and why</th></tr></thead>
+<tbody>
+<tr class="hl"><td class="num">1</td><td>Lesson ID</td><td>L</td><td>Yes</td><td>Stable reference for linking, audit and duplicate control. Never reuse an ID.</td></tr>
+<tr class="hl"><td class="num">2</td><td>Date captured</td><td>L</td><td>Yes</td><td>Guards against late-memory distortion. This is why "timeliness" is a fact here rather than a scored judgement.</td></tr>
+<tr><td class="num">3</td><td>Captured by (role)</td><td>S</td><td>Yes</td><td>Lets a reviewer go back and ask while recall is fresh.</td></tr>
+<tr class="hl"><td class="num">4</td><td>Project / ID</td><td>L</td><td>Yes</td><td>Cross-project retrieval.</td></tr>
+<tr><td class="num">5</td><td>Project type / domain</td><td>all</td><td>Recommended</td><td>Software, infrastructure, data, migration, security, vendor, ERP — lessons differ sharply by type.</td></tr>
+<tr class="hl"><td class="num">6</td><td>Phase / stage / sprint</td><td>L</td><td>Yes</td><td>Searchable by lifecycle position, which is how people actually look.</td></tr>
+<tr><td class="num">7</td><td>Knowledge area</td><td>all</td><td>Recommended</td><td>Scope, schedule, cost, quality, risk, stakeholders, procurement, team.</td></tr>
+<tr class="hl"><td class="num">8</td><td>Category / taxonomy facet</td><td>L</td><td>Yes</td><td>Controlled vocabulary, not free text. This is what stops the register becoming unreadable.</td></tr>
+<tr><td class="num">9</td><td>Lesson type</td><td>all</td><td>Recommended</td><td>Process, technical, governance, people, vendor, regulatory.</td></tr>
+<tr><td class="num">10</td><td>Win / issue / risk / opportunity</td><td>all</td><td>Yes</td><td>Routes the entry to the lesson track or the Potential Best Practice track in §04.</td></tr>
+<tr class="hl"><td class="num">11</td><td>Situation / context</td><td>L</td><td>Yes</td><td>Enough for a stranger to judge whether it transfers.</td></tr>
+<tr><td class="num">12</td><td>Desired outcome</td><td>S</td><td>Yes</td><td>The expectation the deviation is measured against. Without it there is no deviation, only an opinion.</td></tr>
+<tr class="hl"><td class="num">13</td><td>What happened</td><td>L</td><td>Yes</td><td>Facts only, separated from interpretation.</td></tr>
+<tr class="hl"><td class="num">14</td><td>Contributing factors</td><td>L</td><td>Yes</td><td>Plural by design. Replaces the single "root cause" cell.</td></tr>
+<tr><td class="num">15</td><td>Rival explanations considered <span class="newtag">NEW</span></td><td>all</td><td>Recommended</td><td>Puts the competing-hypothesis question into the record instead of leaving it to the reviewer's memory.</td></tr>
+<tr class="hl"><td class="num">16</td><td>Impact</td><td>L</td><td>Yes</td><td>Quantified where possible. Drives what gets resourced.</td></tr>
+<tr><td class="num">17</td><td>Severity / priority</td><td>all</td><td>Recommended</td><td>Lets a PMO scan for what deserves attention.</td></tr>
+<tr class="hl"><td class="num">18</td><td>Trigger / early warning</td><td>L</td><td>Yes</td><td>Converts history into future detection. The if-then field.</td></tr>
+<tr class="hl"><td class="num">19</td><td>Actionable steps</td><td>L</td><td>Yes</td><td>Micro-SOP level where the work is repeatable; principle plus decision rule where it is not.</td></tr>
+<tr><td class="num">20</td><td>Recommendation / process change</td><td>S</td><td>Yes</td><td>Turns an action into an institutional change.</td></tr>
+<tr class="hl"><td class="num">21</td><td><b>Tasking authority</b> <span class="newtag">NEW</span></td><td>L</td><td><b>Yes</b></td><td>The role that can approve <i>and resource</i>. Without it the entry cannot become a Lesson Identified. This is the column whose absence explains most dead registers.</td></tr>
+<tr><td class="num">22</td><td>Action body / owner</td><td>S</td><td>Yes</td><td>The role that executes. This is the old "owner" field, now correctly subordinate to column 21.</td></tr>
+<tr><td class="num">23</td><td>Action plan link <span class="newtag">NEW</span></td><td>all</td><td>Recommended</td><td>Where milestones live once the lesson is approved.</td></tr>
+<tr><td class="num">24</td><td>Due / review date</td><td>all</td><td>Recommended</td><td>Forces closure, then re-evaluation.</td></tr>
+<tr class="hl"><td class="num">25</td><td>Status</td><td>L</td><td>Yes</td><td>One of the nine states in §05, with transition rules. A status column without a state machine is just a dropdown.</td></tr>
+<tr><td class="num">26</td><td>Evidence / source artefact</td><td>S</td><td>Yes</td><td>Makes the entry auditable rather than remembered.</td></tr>
+<tr><td class="num">27</td><td>Related risk / issue / change ID</td><td>S</td><td>Recommended</td><td>Connects the learning system to the execution system.</td></tr>
+<tr><td class="num">28</td><td>Affected stakeholder group</td><td>all</td><td>Recommended</td><td>Who benefits or suffers if this is ignored.</td></tr>
+<tr><td class="num">29</td><td>Applicability limits / assumptions</td><td>S</td><td>Recommended</td><td>Prevents confident reuse in the wrong context. This is the tailoring statement.</td></tr>
+<tr><td class="num">30</td><td>Search keywords</td><td>all</td><td>Recommended</td><td>Retrieval beyond a single taxonomy path.</td></tr>
+<tr><td class="num">31</td><td>Reusable artefact link</td><td>all</td><td>High value</td><td>The checklist, SOP, workflow or template the lesson now lives inside.</td></tr>
+<tr><td class="num">32</td><td>Validation result after reuse</td><td>S</td><td>Advanced</td><td>The evidence that separates "learned" from "stored".</td></tr>
+<tr><td class="num">33</td><td>Approver / PMO decision</td><td>all</td><td>Advanced</td><td>Separates a personal note from accepted organisational knowledge.</td></tr>
+<tr><td class="num">34</td><td>Visibility / releasability <span class="newtag">NEW</span></td><td>all</td><td>Recommended</td><td>Team-internal or shareable. Default to shareable — over-restriction is the quiet killer of reuse.</td></tr>
+</tbody></table></div>
+
+<h3>Building the taxonomy for column 8</h3>
+<p>Do not invent one. Controlled-vocabulary construction is a standardised discipline; build to
+ANSI/NISO Z39.19 or ISO 25964, using a <b>faceted</b> structure rather than a single hierarchy,
+because a lesson is simultaneously about a phase, a domain, a failure mode and a severity.</p>
+<div class="panel li">
+<p style="margin:0 0 8px"><b>Minimum viable facets:</b> lifecycle phase · knowledge area · IT area
+· lesson type · severity · organisational level.</p>
+<p style="margin:0"><b>Test it:</b> tag ten existing entries. If more than two need "Other", the
+term list is wrong — revise the vocabulary rather than piling entries into "Other".</p>
+</div>
+<p><b>When to bother:</b> the first time anyone needs to retrieve by attribute rather than by
+scrolling. That may be at 12 entries or at 200. There is no row-count threshold — the old "about
+40 rows" rule was withdrawn as unsourced (ADR-09).</p>
+
+<h3>One store, not five</h3>
+<p>Multiple repositories fragment retrieval and duplicate entries. When choosing a tool the
+questions that matter are: permissions, search and filter capability, whether evidence can be
+attached, whether versions are controlled, and whether reports can be generated. The register is
+specified here as columns rather than as a product so it survives the tool being replaced.</p>
+</section>
+
+<!-- ================= 03 USING BOTH ================= -->
+<section role="tabpanel" id="p3" aria-labelledby="b3">
+<h2>Using both lists together</h2>
+<p class="lead">The register produces entries. The scoring list improves them. The gates decide
+whether an entry is allowed to move. Here is the order in which those things happen.</p>
+
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Combined workflow of register, scoring and gates">
+<defs>
+<marker id="a1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2E434E"/></marker>
+<marker id="a2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#A8701C"/></marker>
+<marker id="a3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2C6B4C"/></marker>
+</defs>
+<style>
+.bx{fill:#fff;stroke:#2E434E;stroke-width:1.5}
+.bt{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:14.5px;font-weight:600;fill:#0F1419}
+.bs{font-family:'IBM Plex Mono',monospace;font-size:9.5px;fill:#69777E;letter-spacing:.07em}
+.lg{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:11.5px;font-weight:600;fill:#69777E}
+</style>
+<rect class="bx" x="14" y="60" width="164" height="70" rx="2" style="stroke:#2C6B4C;stroke-width:2"/>
+<text class="bt" x="96" y="88" text-anchor="middle">Capture</text>
+<text class="bs" x="96" y="106" text-anchor="middle">30 REGISTER COLUMNS</text>
+<text class="bs" x="96" y="119" text-anchor="middle">§02 · TEMPLATE §04</text>
+
+<rect class="bx" x="212" y="60" width="150" height="70" rx="2"/>
+<text class="bt" x="287" y="88" text-anchor="middle">Gates G1–G4</text>
+<text class="bs" x="287" y="106" text-anchor="middle">FACTUAL · SYSTEMIC</text>
+<text class="bs" x="287" y="119" text-anchor="middle">CLEAR · NOT DUPLICATE</text>
+
+<rect class="bx" x="396" y="60" width="164" height="70" rx="2" style="stroke:#A8701C;stroke-width:2"/>
+<text class="bt" x="478" y="88" text-anchor="middle">Score &amp; improve</text>
+<text class="bs" x="478" y="106" text-anchor="middle">12 SCORING CRITERIA</text>
+<text class="bs" x="478" y="119" text-anchor="middle">§01 · LQI 0–100</text>
+
+<rect class="bx" x="594" y="60" width="146" height="70" rx="2"/>
+<text class="bt" x="667" y="88" text-anchor="middle">Gate G5</text>
+<text class="bs" x="667" y="106" text-anchor="middle">CAUSAL MATURITY</text>
+<text class="bs" x="667" y="119" text-anchor="middle">+ AUTHORITY NAMED</text>
+
+<rect class="bx" x="774" y="60" width="212" height="70" rx="2" style="stroke:#2C6B4C;stroke-width:2"/>
+<text class="bt" x="880" y="82" text-anchor="middle">Endorse → task → act</text>
+<text class="bt" x="880" y="99" text-anchor="middle">→ validate</text>
+<text class="bs" x="880" y="119" text-anchor="middle">§05 · LESSON LEARNED</text>
+
+<path d="M178,95 H208" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#a1)"/>
+<path d="M362,95 H392" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#a1)"/>
+<path d="M560,95 H590" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#a1)"/>
+<path d="M740,95 H770" stroke="#2C6B4C" stroke-width="2" fill="none" marker-end="url(#a3)"/>
+
+<path d="M478,130 V172 H300 V172" stroke="#A8701C" stroke-width="1.6" fill="none" stroke-dasharray="6 4"/>
+<path d="M300,172 V130" stroke="#A8701C" stroke-width="1.6" fill="none" marker-end="url(#a2)"/>
+<text class="lg" x="390" y="190" text-anchor="middle" style="fill:#A8701C">rewrite the two lowest criteria and re-score — this loop is the learning</text>
+
+<path d="M287,130 V226 H96 V130" stroke="#8C3A2E" stroke-width="1.3" fill="none" stroke-dasharray="5 4" marker-end="url(#a1)"/>
+<text class="lg" x="196" y="244" text-anchor="middle" style="fill:#8C3A2E">gate failure returns the entry — it is not scored low, it is sent back</text>
+
+<path d="M880,130 V270 H478 V130" stroke="#2C6B4C" stroke-width="1.4" fill="none" stroke-dasharray="6 4" marker-end="url(#a3)"/>
+<text class="lg" x="700" y="288" text-anchor="middle" style="fill:#2C6B4C">validation result raises C09 and C20 — a validated lesson scores higher than an unvalidated one</text>
+
+<text class="lg" x="14" y="34">LIST TWO — WHAT A LESSON IS</text>
+<text class="lg" x="396" y="34" style="fill:#A8701C">LIST ONE — HOW GOOD IT IS</text>
+<text class="lg" x="774" y="34" style="fill:#2C6B4C">WHAT MAKES IT COUNT</text>
+</svg>
+<figcaption><b>Figure 1</b>Where each list acts. Capture fills the register; the scoring list runs
+as a loop on entries that already exist; gates control movement. Note the green feedback line:
+validation evidence feeds back into two of the scoring criteria, so a lesson that was actually
+acted on will score higher than one that was merely written well.</figcaption>
+</figure>
+
+<h3>Gates — pass or fail, never scored</h3>
+<p>A gate returns work. A score ranks work that is already viable. Averaging a broken entry into a
+mediocre number is how registers fill with items that were never usable.</p>
+<div class="tcap"><span class="cid">Table 5 — entry gates</span>Binary. Adapted from established lessons-learned review and maturity checklists.</div><div class="tw"><table>
+<thead><tr><th style="min-width:44px">ID</th><th style="min-width:160px">Gate</th>
+<th style="min-width:290px">Question</th><th style="min-width:180px">If it fails</th></tr></thead>
+<tbody>
+<tr><td class="id">G1</td><td>Objectivity</td><td>Is this based on facts rather than an opinion about something or somebody?</td><td>Return and ask for the supporting record.</td></tr>
+<tr><td class="id">G2</td><td>Systemic scope</td><td>Is this a system issue rather than one person's error?</td><td>Return; reframe or withdraw. Never escalate a named individual.</td></tr>
+<tr><td class="id">G3</td><td>Description adequacy</td><td>Does the entry describe the situation adequately and correctly?</td><td>Return while recall is still fresh.</td></tr>
+<tr><td class="id">G4</td><td>Duplicate check</td><td>Was the register checked for an existing lesson that already covers this?</td><td>Merge into the existing entry.</td></tr>
+<tr class="hl"><td class="id">G5</td><td>Causal maturity</td><td>Are the contributing factors clear and plausible? Are there no other obvious explanations? Do the recommended actions address those factors? Is a suitable tasking authority named?</td><td>Return for further analysis. This is the boundary between an observation and a Lesson Identified — and the reason causal depth is gated here rather than scored in §01.</td></tr>
+</tbody></table></div>
+
+<h3>When to do what</h3>
+<div class="tcap"><span class="cid">Table 6 — cadence</span>The schedule that replaces "capture lessons promptly"</div><div class="tw"><table>
+<thead><tr><th style="min-width:130px">Moment</th><th style="min-width:250px">Action</th>
+<th style="min-width:180px">Which list</th></tr></thead>
+<tbody>
+<tr><td>Project start</td><td><b>Search the register first</b> and retrieve prior lessons for this project type before planning.</td><td>Register (columns 8, 30)</td></tr>
+<tr><td>Sprint / stage end</td><td>Structured debrief: what was planned, what happened, why, what changes. This is where the measured 20–25% improvement comes from — not from the spreadsheet.</td><td>Register capture</td></tr>
+<tr><td>On incident</td><td>Capture within 48 hours, while the author can still be asked questions.</td><td>Register capture</td></tr>
+<tr><td>Phase gate</td><td>Run gates G1–G5. Merge duplicates into single richer entries. <b>Score and improve the surviving entries.</b></td><td>Both</td></tr>
+<tr><td>Closure</td><td>Refine, do not originate. Anything first written at closure is memory, not observation. Post-project reporting is for the <i>next</i> project's planners.</td><td>Scoring list</td></tr>
+<tr><td>Post-implementation</td><td>Validate remedial actions from earlier lessons and record the result.</td><td>Register (32) → scoring C09, C20</td></tr>
+</tbody></table></div>
+
+<div class="panel steel">
+<h4>Two failure modes to watch for</h4>
+<p style="margin:0 0 8px"><b>Scoring without a process.</b> A high LQI on an entry nobody is
+resourced to act on is a well-written note. The scoring list can be gamed into producing beautiful
+dead entries. Column 21 and gate G5 exist to make that harder.</p>
+<p style="margin:0"><b>Process without scoring.</b> A register that moves entries through states
+without anyone checking whether they are executable produces the documented outcome: lessons
+identified, not learned. Both halves are required.</p>
+</div>
+</section>
+
+<!-- ================= 04 TEMPLATES ================= -->
+<section role="tabpanel" id="p4" aria-labelledby="b4">
+<h2>Templates</h2>
+<p class="lead">One capture template built on the ODCR spine — Observation, Discussion,
+Conclusion, Recommendation — so entries stay interoperable with the process in §05. The
+right-hand column states what the field must contain. The tag under each field name shows which
+scoring criterion it feeds.</p>
+
+<h3>LL-01 · Lesson capture</h3>
+<div class="tpl">
+<div class="row"><div class="f">Title<small>register col 1, 4</small></div>
+<div class="c">The issue <i>and</i> the situation. "Vendor approvals stalled at stage gate 2" — not
+"Vendor problems".</div></div>
+<div class="row"><div class="f">Observation<small>col 13 · what happened</small></div>
+<div class="c">Factual description of the issue to avoid or the success to repeat. <b>Facts
+only.</b> No interpretation, no attribution to a person.</div></div>
+<div class="row"><div class="f">Discussion<small>col 11, 12, 16 · scores C08, C10</small></div>
+<div class="c">What was supposed to happen and what actually happened. Where, when, who by role.
+Why. What the impact was, with a figure. Objective evidence attached.</div></div>
+<div class="row"><div class="f">Contributing factors<small>col 14, 15 · gate G5 · scores C04, C05</small></div>
+<div class="c">Several factors and their interaction — not one distal cause. Name at least one
+rival explanation and the evidence against it.</div></div>
+<div class="row"><div class="f">Conclusion<small>col 20 · the transferable statement</small></div>
+<div class="c">One trigger, one causal logic, one action set. If it needs three, it is three
+lessons.</div></div>
+<div class="row"><div class="f">Trigger<small>col 18 · scores C02, C17</small></div>
+<div class="c">If-then form with a number where possible. "If more than five external teams are in
+scope…"</div></div>
+<div class="row"><div class="f">Recommendation<small>col 19 · scores C01, C11</small></div>
+<div class="c">Three to seven atomic steps, each starting with an action verb and naming object,
+condition and tool or location. Mark <span class="mono">[FIX]</span> and
+<span class="mono">[PREVENT]</span> separately.</div></div>
+<div class="row"><div class="f">Tasking authority<small>col 21 · scores C03 · mandatory</small></div>
+<div class="c"><b>The role that can approve and commit resources</b>, plus the proposed action body.
+Roles, never a personal name alone. <b>Without this the entry cannot become a Lesson
+Identified.</b></div></div>
+<div class="row"><div class="f">Artefact to change<small>col 31 · scores C12</small></div>
+<div class="c">The template, checklist, definition of done, workflow, gate or onboarding step that
+will be different afterwards. Give the path.</div></div>
+<div class="row"><div class="f">Success criterion<small>col 32 · scores C09</small></div>
+<div class="c">How a future user knows it worked, and when it will be checked. This is what
+validation tests against.</div></div>
+<div class="row"><div class="f">Evidence links<small>col 26, 27 · scores C07, C16</small></div>
+<div class="c">Issue log, ticket, defect report, test result, retro note, KPI, change request,
+audit finding.</div></div>
+<div class="row"><div class="f">Metadata<small>col 8, 30 · scores C13</small></div>
+<div class="c">Facets from §02: phase, domain, IT area, failure mode, severity, level. Plus search
+keywords and releasability.</div></div>
+<div class="row"><div class="f">Status<small>col 25 · scores C20</small></div>
+<div class="c">One of the nine states in §05. Updated by whoever maintains the register, not by the
+author.</div></div>
+</div>
+
+<h3>LL-02 · Potential Best Practice</h3>
+<p>The track for successes. A success recorded as a compliment dies; recorded as a Potential Best
+Practice it gets analysed, compared and embedded.</p>
+<div class="tpl">
+<div class="row"><div class="f">Observed success</div><div class="c">What produced a better outcome than expected, factually and with a figure.</div></div>
+<div class="row"><div class="f">Conditions</div><div class="c">The circumstances under which it worked. Without this the practice gets applied where it fails.</div></div>
+<div class="row"><div class="f">Contributing factors</div><div class="c">Why it worked. Same standard as for problems.</div></div>
+<div class="row"><div class="f">Action to repeat</div><div class="c">What must be done to make the success reproducible rather than lucky.</div></div>
+<div class="row"><div class="f">Comparison</div><div class="c"><b>Evidence that this beats the alternatives.</b> A practice is not "best" until compared — this is the validation test for this track.</div></div>
+<div class="row"><div class="f">Review date</div><div class="c">Best practices go stale. Schedule the re-check or it stays "best" long after it isn't.</div></div>
+</div>
+<p class="anchor"><b>Discipline rule:</b> do not broadcast a good practice before it has been
+analysed. Early publicity makes people assume the work is finished, and it never gets embedded —
+the mirror image of premature closure on problems.</p>
+
+<h3>LL-03 · Action plan</h3>
+<div class="tpl">
+<div class="row"><div class="f">Remedial action</div><div class="c">Verbatim from the approved recommendation, so scope creep is visible.</div></div>
+<div class="row"><div class="f">Action body</div><div class="c">The role executing. Reports progress to the tasking authority.</div></div>
+<div class="row"><div class="f">Milestones</div><div class="c">Enough for leadership to see movement. Three to five is usually right.</div></div>
+<div class="row"><div class="f">Resources committed</div><div class="c">Named at approval, not assumed. Unresourced approval is the commonest way a Lesson Identified dies.</div></div>
+<div class="row"><div class="f">Validation requirement</div><div class="c">Defined <b>here</b>, before implementation: what will be measured, by whom, and how much rigour the impact warrants.</div></div>
+<div class="row"><div class="f">Validator</div><div class="c">Ideally independent of the action body. Otherwise "learned" becomes self-declared.</div></div>
+</div>
+
+<h3>Worked corrections</h3>
+<div class="tcap"><span class="cid">Table 7 — weak to strong</span>Three entries rewritten against the scoring criteria</div><div class="tw"><table>
+<thead><tr><th style="min-width:120px">Weak entry</th><th style="min-width:180px">Why it scores low</th>
+<th style="min-width:390px">Corrected</th></tr></thead>
+<tbody>
+<tr><td><i>"Invent taxonomy."</i></td>
+<td>C01=1 (theme, not action) · C02=0 · C03=0 · C09=0. Also wrong in principle: taxonomies are built to a standard, not invented.</td>
+<td><b>Trigger:</b> when the register passes 30 entries or a second project starts using it, whichever first.<br>
+<b>Action:</b> the PMO analyst builds a controlled vocabulary to ANSI/NISO Z39.19 with mandatory facets — phase, knowledge area, IT area, lesson type, severity. Tests it by tagging 10 existing entries; if more than 2 need "Other", revises the term list. Publishes at &lt;path&gt; and makes facets mandatory on new entries.<br>
+<b>Authority:</b> Head of PMO · <b>Action body:</b> PMO analyst.<br>
+<b>Success:</b> zero "Other" tags across the next 20 entries; median retrieval under 60 seconds in a five-query test.</td></tr>
+<tr><td><i>"Testing was late because the team was disorganised."</i></td>
+<td><b>Fails gate G2 outright</b> — a system outcome blamed on people. C04=1 · C05=0 · C07=0.</td>
+<td><b>Observation:</b> system test start slipped 11 working days against baseline across two consecutive releases.<br>
+<b>Contributing factors:</b> environment provisioning depended on one infrastructure engineer (queue depth 6 at peak); test data refresh needed a change approval with a standing 5-day lead time; test entry criteria were not enforced at the build gate. <b>Rival explanation rejected:</b> insufficient test effort — actual tester hours matched plan within 4%.<br>
+<b>Trigger:</b> any release needing a fresh environment plus a data refresh.<br>
+<b>Action:</b> [PREVENT] add environment readiness and data-refresh approval as explicit exit criteria on the build gate; [FIX] raise the change request at sprint start rather than at test start.<br>
+<b>Authority:</b> delivery lead · <b>Action body:</b> release manager.<br>
+<b>Success:</b> test start variance under 2 days across the next three releases.</td></tr>
+<tr><td><i>"Daily stand-ups with the vendor worked really well — everyone loved them."</i></td>
+<td>A success with no track. C19 credit, but C01=1 · C03=0 · C09=0. It will survive in one team's memory and nowhere else.</td>
+<td><b>Potential Best Practice.</b><br>
+<b>Observed success:</b> vendor response latency fell from a median of 3.2 days to 0.9 days after a 15-minute joint daily call.<br>
+<b>Conditions:</b> single vendor, overlapping time zones, fewer than 12 participants. Not tested with multiple vendors or offshore offsets.<br>
+<b>Action to repeat:</b> add the joint daily to vendor onboarding for engagements meeting those conditions.<br>
+<b>Comparison:</b> weekly steering only — 3.2 days; shared ticket queue without a call — 2.1 days. The daily call beats both here.<br>
+<b>Authority:</b> procurement lead · <b>Review:</b> after the next two engagements.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ================= 05 PROCESS ================= -->
+<section role="tabpanel" id="p5" aria-labelledby="b5">
+<h2>Process — how a lesson becomes real</h2>
+<p class="lead">Register quality does not produce learning on its own. What produces it is a
+structured debrief and an executed, validated action. This architecture is adapted from published
+lessons-learned doctrine written to be usable by any organisation, and independently mirrored in
+French joint doctrine. Roles are renamed to project-management equivalents.</p>
+
+<div class="panel li">
+<h4>The distinction everything hangs on</h4>
+<p><b>Lesson Identified</b> — an observation with analysis, established contributing factors, a
+recommended action, and a named authority who can resource it.</p>
+<p style="margin:0"><b>Lesson Learned</b> — a confirmed improvement resulting from implementing that
+action. <b>A register that does not separate the two is reporting success it has not
+achieved.</b></p>
+</div>
+
+<figure>
+<svg viewBox="0 0 1000 350" role="img" aria-label="Two-phase process with endorsement gate">
+<defs>
+<marker id="m1" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2E434E"/></marker>
+<marker id="m2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#2C6B4C"/></marker>
+<marker id="m3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#8C3A2E"/></marker>
+</defs>
+<style>
+.pb{fill:#fff;stroke:#2E434E;stroke-width:1.5}
+.pt{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:15px;font-weight:600;fill:#0F1419}
+.ps{font-family:'IBM Plex Mono',monospace;font-size:9.5px;fill:#69777E;letter-spacing:.07em}
+.pp{font-family:'IBM Plex Mono',monospace;font-size:10px;fill:#69777E;letter-spacing:.15em}
+</style>
+<rect x="14" y="44" width="440" height="116" fill="#F1F3EF" stroke="#C0C7C1"/>
+<text class="pp" x="24" y="62">ANALYSIS PHASE — IDENTIFICATION</text>
+<rect x="524" y="44" width="462" height="116" fill="#F1F3EF" stroke="#C0C7C1"/>
+<text class="pp" x="534" y="62">IMPLEMENTATION PHASE — ACTION &amp; INSTITUTIONALIZATION</text>
+
+<rect class="pb" x="28" y="78" width="120" height="62"/><text class="pt" x="88" y="104" text-anchor="middle">1 · Plan</text><text class="ps" x="88" y="122" text-anchor="middle">COLLECTION PLAN</text>
+<rect class="pb" x="168" y="78" width="120" height="62"/><text class="pt" x="228" y="104" text-anchor="middle">2 · Observe</text><text class="ps" x="228" y="122" text-anchor="middle">ODCR CAPTURE</text>
+<rect class="pb" x="308" y="78" width="132" height="62"/><text class="pt" x="374" y="104" text-anchor="middle">3 · Analyse</text><text class="ps" x="374" y="122" text-anchor="middle">FACTORS · ACTION · AUTHORITY</text>
+<path d="M148,109 H164" stroke="#2E434E" stroke-width="1.6" marker-end="url(#m1)"/>
+<path d="M288,109 H304" stroke="#2E434E" stroke-width="1.6" marker-end="url(#m1)"/>
+
+<path d="M489,71 L523,109 L489,147 L455,109 Z" fill="#F2E7CF" stroke="#A8701C" stroke-width="2"/>
+<text x="489" y="105" text-anchor="middle" style="font-family:'IBM Plex Sans Condensed';font-size:11.5px;font-weight:700;fill:#A8701C">ENDORSE</text>
+<text x="489" y="119" text-anchor="middle" style="font-family:'IBM Plex Mono';font-size:8.5px;fill:#A8701C">GATE G5</text>
+<path d="M440,109 H452" stroke="#2E434E" stroke-width="1.6" marker-end="url(#m1)"/>
+<text x="489" y="34" text-anchor="middle" style="font-family:'IBM Plex Sans Condensed';font-size:13px;font-weight:700;fill:#A8701C">→ LESSON IDENTIFIED</text>
+<text x="489" y="167" text-anchor="middle" style="font-family:'IBM Plex Mono';font-size:9px;fill:#A8701C">or Potential Best Practice</text>
+
+<rect class="pb" x="538" y="78" width="118" height="62"/><text class="pt" x="597" y="104" text-anchor="middle">4 · Decide</text><text class="ps" x="597" y="122" text-anchor="middle">APPROVE OR NOTE</text>
+<rect class="pb" x="676" y="78" width="160" height="62"/><text class="pt" x="756" y="100" text-anchor="middle">5 · Implement</text><text class="pt" x="756" y="116" text-anchor="middle">&amp; Validate</text><text class="ps" x="756" y="132" text-anchor="middle">ACTION PLAN → EVIDENCE</text>
+<rect class="pb" x="856" y="78" width="116" height="62" style="stroke:#2C6B4C;stroke-width:2"/><text class="pt" x="914" y="104" text-anchor="middle">6 · Share</text><text class="ps" x="914" y="122" text-anchor="middle">DISSEMINATE</text>
+<path d="M523,109 H534" stroke="#2E434E" stroke-width="1.6" marker-end="url(#m1)"/>
+<path d="M656,109 H672" stroke="#2E434E" stroke-width="1.6" marker-end="url(#m1)"/>
+<path d="M836,109 H852" stroke="#2C6B4C" stroke-width="2" marker-end="url(#m2)"/>
+<text x="914" y="34" text-anchor="middle" style="font-family:'IBM Plex Sans Condensed';font-size:13px;font-weight:700;fill:#2C6B4C">→ LESSON LEARNED</text>
+
+<rect x="168" y="234" width="150" height="40" fill="#F1DCD8" stroke="#8C3A2E" stroke-width="1.2"/>
+<text x="243" y="259" text-anchor="middle" style="font-family:'IBM Plex Sans Condensed';font-size:12px;font-weight:600;fill:#8C3A2E">Observation Rejected</text>
+<rect x="524" y="234" width="132" height="40" fill="#F1DCD8" stroke="#8C3A2E" stroke-width="1.2"/>
+<text x="590" y="259" text-anchor="middle" style="font-family:'IBM Plex Sans Condensed';font-size:12px;font-weight:600;fill:#8C3A2E">Lesson Noted</text>
+<path d="M228,140 V230" stroke="#8C3A2E" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#m3)"/>
+<path d="M597,140 V230" stroke="#8C3A2E" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#m3)"/>
+<text class="ps" x="330" y="254">ARCHIVED WITH A REASON — STILL SEARCHABLE</text>
+<text class="ps" x="668" y="254">AUTHORITY SAW IT AND DECLINED TO RESOURCE IT</text>
+
+<path d="M914,140 V196 H374 V147" stroke="#2C6B4C" stroke-width="1.4" stroke-dasharray="6 4" fill="none" marker-end="url(#m2)"/>
+<text x="640" y="212" text-anchor="middle" style="font-family:'IBM Plex Sans Condensed';font-size:12px;font-weight:600;fill:#2C6B4C">re-use: search prior lessons before analysing a new one — gate G4</text>
+<text class="ps" x="14" y="308">SHARING RUNS ACROSS ALL SIX STEPS, NOT ONLY STEP 6</text>
+<text class="ps" x="14" y="330">GOING BACK IS NORMAL: NEW INFORMATION, WEAK CAPTURE, DISPUTED ACTION OR FAILED VALIDATION ALL RETURN THE ENTRY</text>
+</svg>
+<figcaption><b>Figure 2</b>Both rejection paths are first-class outcomes. "Noted" specifically
+means an authority saw the lesson and declined to fund it — information a future PM needs, and
+information a simple open/closed status field destroys.</figcaption>
+</figure>
+
+<h3>The nine states</h3>
+<figure>
+<svg viewBox="0 0 1000 205" role="img" aria-label="Lesson status transitions">
+<style>
+.sb{fill:#fff;stroke:#2E434E;stroke-width:1.4}
+.st{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:13px;font-weight:600;fill:#0F1419}
+.sk{font-family:'IBM Plex Mono',monospace;font-size:9px;fill:#69777E;letter-spacing:.05em}
+</style>
+<rect class="sb" x="10" y="18" width="130" height="44" rx="4"/><text class="st" x="75" y="38" text-anchor="middle">Submitted</text><text class="sk" x="75" y="52" text-anchor="middle">RAW OBSERVATION</text>
+<rect class="sb" x="180" y="18" width="130" height="44" rx="4"/><text class="st" x="245" y="38" text-anchor="middle">Observation</text><text class="sk" x="245" y="52" text-anchor="middle">G1–G4 PASSED</text>
+<rect class="sb" x="350" y="18" width="150" height="44" rx="4" style="stroke:#A8701C;stroke-width:2"/><text class="st" x="425" y="38" text-anchor="middle">Lesson Identified</text><text class="sk" x="425" y="52" text-anchor="middle">G5 · ENDORSED</text>
+<rect class="sb" x="540" y="18" width="146" height="44" rx="4"/><text class="st" x="613" y="38" text-anchor="middle">Approved</text><text class="sk" x="613" y="52" text-anchor="middle">TASKED · RESOURCED</text>
+<rect class="sb" x="726" y="18" width="140" height="44" rx="4"/><text class="st" x="796" y="38" text-anchor="middle">Implemented</text><text class="sk" x="796" y="52" text-anchor="middle">ACTION PLAN DONE</text>
+<rect class="sb" x="726" y="118" width="140" height="44" rx="4" style="stroke:#2C6B4C;stroke-width:2.4"/><text class="st" x="796" y="138" text-anchor="middle">Lesson Learned</text><text class="sk" x="796" y="152" text-anchor="middle">VALIDATED</text>
+<rect class="sb" x="890" y="118" width="98" height="44" rx="4"/><text class="st" x="939" y="138" text-anchor="middle">Retired</text><text class="sk" x="939" y="152" text-anchor="middle">SUPERSEDED</text>
+<rect class="sb" x="180" y="118" width="130" height="44" rx="4" style="fill:#F1DCD8;stroke:#8C3A2E"/><text class="st" x="245" y="138" text-anchor="middle" style="fill:#8C3A2E">Rejected</text><text class="sk" x="245" y="152" text-anchor="middle" style="fill:#8C3A2E">ARCHIVED, REASONED</text>
+<rect class="sb" x="540" y="118" width="146" height="44" rx="4" style="fill:#F1DCD8;stroke:#8C3A2E"/><text class="st" x="613" y="138" text-anchor="middle" style="fill:#8C3A2E">Noted</text><text class="sk" x="613" y="152" text-anchor="middle" style="fill:#8C3A2E">NOT RESOURCED</text>
+<path d="M140,40 H176" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#m1)"/>
+<path d="M310,40 H346" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#m1)"/>
+<path d="M500,40 H536" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#m1)"/>
+<path d="M686,40 H722" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#m1)"/>
+<path d="M796,62 V114" stroke="#2C6B4C" stroke-width="2" fill="none" marker-end="url(#m2)"/>
+<path d="M866,140 H886" stroke="#2E434E" stroke-width="1.6" fill="none" marker-end="url(#m1)"/>
+<path d="M245,62 V114" stroke="#8C3A2E" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#m3)"/>
+<path d="M613,62 V114" stroke="#8C3A2E" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#m3)"/>
+<path d="M425,62 V90 H298 V62" stroke="#A8701C" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#m1)"/>
+<text class="sk" x="330" y="86" style="fill:#A8701C">BACK FOR ANALYSIS</text>
+<path d="M796,162 V182 H425 V62" stroke="#2C6B4C" stroke-width="1.3" stroke-dasharray="5 4" fill="none" marker-end="url(#m2)"/>
+<text class="sk" x="470" y="178" style="fill:#2C6B4C">VALIDATION FAILED → RE-ANALYSE</text>
+</svg>
+<figcaption><b>Figure 3</b>Register column 25 takes one of these nine values. Only validation
+promotes an entry to Lesson Learned.</figcaption>
+</figure>
+
+<h3>Roles</h3>
+<div class="tcap"><span class="cid">Table 8 — who does what</span>And what breaks when the role is vacant</div><div class="tw"><table>
+<thead><tr><th style="min-width:150px">Role</th><th style="min-width:270px">Sole responsibility</th>
+<th style="min-width:190px">If nobody holds it</th></tr></thead>
+<tbody>
+<tr><td>Originator — any team member</td><td>Captures the observation in ODCR form while recall is fresh.</td><td>Nothing enters the system.</td></tr>
+<tr><td>Register keeper — PMO analyst or delivery lead</td><td>Runs the gates, does the analysis, merges duplicates, chases the authority, maintains the register.</td><td>Entries stall at Submitted indefinitely.</td></tr>
+<tr><td>Endorsing authority — PM or sponsor</td><td>Confirms the analysis is sound and forwards it to whoever can act.</td><td>Half-analysed items reach decision-makers and get dismissed.</td></tr>
+<tr class="hl"><td><b>Tasking authority</b> — Head of PMO or functional owner</td><td><b>Approves or notes, and commits resources.</b> Nobody else can convert a recommendation into work.</td><td>The register fills with good advice nobody is funded to follow. This is the commonest failure.</td></tr>
+<tr><td>Action body — the team owning the artefact</td><td>Writes the action plan with milestones and executes it.</td><td>Approval without execution.</td></tr>
+<tr><td>Validator — independent reviewer or QA</td><td>Confirms the action produced the intended improvement.</td><td>"Learned" becomes self-declared.</td></tr>
+<tr><td>Leadership — sponsor or steering group</td><td>Prioritises, resources, follows up.</td><td>Everything above degrades into paperwork.</td></tr>
+</tbody></table></div>
+
+<h3>Why the register is only one part</h3>
+<figure>
+<svg viewBox="0 0 1000 240" role="img" aria-label="Capability model">
+<style>.cl{font-family:'IBM Plex Sans Condensed',sans-serif;font-size:15px;font-weight:600;fill:#0F1419}
+.cs{font-family:'IBM Plex Mono',monospace;font-size:9.5px;fill:#69777E;letter-spacing:.07em}</style>
+<rect x="120" y="12" width="760" height="44" fill="#DCEAE1" stroke="#2C6B4C" stroke-width="1.6"/>
+<text class="cl" x="500" y="33" text-anchor="middle">Information sharing</text>
+<text class="cs" x="500" y="48" text-anchor="middle">CAPSTONE — RETRIEVAL AND RE-USE, OR NONE OF THE BELOW MATTERS</text>
+<rect x="120" y="72" width="178" height="86" fill="#fff" stroke="#2E434E" stroke-width="1.4"/><text class="cl" x="209" y="112" text-anchor="middle">Structure</text><text class="cs" x="209" y="130" text-anchor="middle">NAMED ROLES · TABLE 8</text>
+<rect x="314" y="72" width="178" height="86" fill="#fff" stroke="#2E434E" stroke-width="1.4"/><text class="cl" x="403" y="112" text-anchor="middle">Process</text><text class="cs" x="403" y="130" text-anchor="middle">FIGURE 2</text>
+<rect x="508" y="72" width="178" height="86" fill="#fff" stroke="#2E434E" stroke-width="1.4"/><text class="cl" x="597" y="112" text-anchor="middle">Tools</text><text class="cs" x="597" y="130" text-anchor="middle">ONE REGISTER · §02</text>
+<rect x="702" y="72" width="178" height="86" fill="#fff" stroke="#2E434E" stroke-width="1.4"/><text class="cl" x="791" y="112" text-anchor="middle">Training</text><text class="cs" x="791" y="130" text-anchor="middle">AUTHORS AND SCORERS</text>
+<rect x="40" y="174" width="920" height="52" fill="#F2E7CF" stroke="#A8701C" stroke-width="1.8"/>
+<text class="cl" x="500" y="198" text-anchor="middle">Mindset &nbsp;·&nbsp; Leadership</text>
+<text class="cs" x="500" y="214" text-anchor="middle">FOUNDATION — A SAFE CLIMATE FOR REPORTING, AND A LEADER WHO ASKS ABOUT THE REGISTER</text>
+</svg>
+<figcaption><b>Figure 4</b>The two lists in this toolkit are the Tools pillar and part of
+Training. If reporting a problem is career-damaging, or no leader ever asks about the register, the
+scoring list grades an empty set. That is the structural reason lessons systems fail, and no column
+specification can fix it.</figcaption>
+</figure>
+
+<h3>Maturity — what may be shared, and with what warning</h3>
+<div class="tcap"><span class="cid">Table 9 — information maturity</span>Declare the level; do not withhold the information</div><div class="tw"><table>
+<thead><tr><th style="min-width:80px">Level</th><th style="min-width:220px">Contains</th><th style="min-width:280px">Use rule</th></tr></thead>
+<tbody>
+<tr><td><b>Low</b></td><td>Raw observations, debrief notes, unanalysed good practice.</td><td>Shareable as a starting point for planning. <b>Must not be acted on without scrutiny</b> — acting on it is at best wasteful.</td></tr>
+<tr><td><b>Medium</b></td><td>Mature observations, Lessons Identified, Potential Best Practices, interim reports.</td><td>Usable for planning input and risk identification. Not yet evidence that anything works.</td></tr>
+<tr><td><b>High</b></td><td>Lessons Learned, Best Practices, analysis reports, debrief outputs.</td><td>Usable as a basis for changing a template, standard or checklist.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ================= A DERIVATION ================= -->
+<section role="tabpanel" id="pA" aria-labelledby="bA">
+<h2>How the ranking was derived</h2>
+<p class="lead">Everything needed to reproduce or refute the weights in §01. It is here rather than
+there because you do not need any of it to use the toolkit — and you should be able to attack it
+without wading through it.</p>
+
+<div class="panel steel">
+<h4>Decision statement</h4>
+<p style="margin:0">Select 8–12 scoring criteria from 20 candidates, such that the resulting rubric
+maximises the chance that a scored lesson actually changes future behaviour, while remaining
+reliably scorable by a non-expert under time pressure. <b>Alternatives</b> = the 20 candidate
+criteria. <b>Criteria</b> = the five meta-criteria below.</p>
+</div>
+
+<div class="tcap"><span class="cid">Table A1 — meta-criteria</span>With the 1–9 anchors used to score the matrix</div><div class="tw"><table>
+<thead><tr><th style="min-width:40px">ID</th><th style="min-width:140px">Meta-criterion</th>
+<th style="min-width:56px">Sense</th><th style="min-width:270px">Definition</th>
+<th style="min-width:220px">Anchors 1 / 5 / 9</th></tr></thead>
+<tbody>
+<tr><td class="id">M1</td><td>Implementation leverage</td><td>benefit</td><td>Does scoring this change what a PM actually does, rather than how the entry reads?</td><td>1 affects prose only · 5 affects structure · 9 determines whether the lesson is executable at all</td></tr>
+<tr><td class="id">M2</td><td>Grading observability</td><td>benefit</td><td>Can two independent raters reach the same score from the text alone?</td><td>1 pure judgement · 5 judgement with visible cues · 9 directly checkable</td></tr>
+<tr><td class="id">M3</td><td>IT transferability</td><td>benefit</td><td>Does it hold across software, infrastructure, data, migration, vendor and regulated contexts?</td><td>1 domain-specific · 5 most delivery modes · 9 regardless of context</td></tr>
+<tr><td class="id">M4</td><td>Recurrence prevention</td><td>benefit</td><td>How strongly does satisfying it reduce the chance the failure repeats?</td><td>1 documentation hygiene · 5 plausible causal link · 9 mechanism supported by cited evidence</td></tr>
+<tr><td class="id">M5</td><td>Rater cost</td><td><b>cost</b></td><td>Time and cognitive load to score one entry, including risk of disagreement needing adjudication.</td><td>1 seconds, checkable · 5 requires reading the whole entry · 9 requires expertise and debate</td></tr>
+</tbody></table></div>
+
+<details>
+<summary>Stage 1 — SWARA weight elicitation, all intermediate values</summary>
+<div class="dbody">
+<div class="fx"><span class="lbl">Procedure</span>
+1. Rank meta-criteria, most important first.<br>
+2. For each subsequent criterion <em>j</em>, state <em>s<sub>j</sub></em> = comparative importance of average value relative to <em>j−1</em>.<br>
+3. <em>k<sub>j</sub></em> = 1 for <em>j</em>=1, else <em>s<sub>j</sub></em>+1 &nbsp;·&nbsp;
+4. <em>q<sub>j</sub></em> = 1 for <em>j</em>=1, else <em>q<sub>j−1</sub>/k<sub>j</sub></em> &nbsp;·&nbsp;
+5. <em>w<sub>j</sub></em> = <em>q<sub>j</sub></em>/Σ<em>q</em>
+</div>
+<div class="tcap"><span class="cid">Table A2 — SWARA</span>Weights sum to exactly 1.00000. v1.0's summed to 0.995.</div><div class="tw"><table>
+<thead><tr><th class="num">Rank</th><th>ID</th><th style="min-width:170px">Meta-criterion</th>
+<th class="num">s<sub>j</sub></th><th class="num">k<sub>j</sub></th><th class="num">q<sub>j</sub></th><th class="num">w<sub>j</sub></th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="id">M1</td><td>Implementation leverage</td><td class="num">—</td><td class="num">1.000</td><td class="num">1.000000</td><td class="num"><b>0.25043</b></td></tr><tr><td class="num">2</td><td class="id">M2</td><td>Grading observability</td><td class="num">0.10</td><td class="num">1.100</td><td class="num">0.909091</td><td class="num"><b>0.22766</b></td></tr><tr><td class="num">3</td><td class="id">M4</td><td>Recurrence-prevention power</td><td class="num">0.15</td><td class="num">1.150</td><td class="num">0.790514</td><td class="num"><b>0.19797</b></td></tr><tr><td class="num">4</td><td class="id">M3</td><td>IT transferability</td><td class="num">0.10</td><td class="num">1.100</td><td class="num">0.718649</td><td class="num"><b>0.17997</b></td></tr><tr><td class="num">5</td><td class="id">M5</td><td>Rater cost</td><td class="num">0.25</td><td class="num">1.250</td><td class="num">0.574919</td><td class="num"><b>0.14398</b></td></tr></tbody>
+<tfoot><tr style="background:var(--panel2);font-weight:600"><td colspan="5" style="text-align:right;padding-right:10px">Σ</td><td class="num">3.993173</td><td class="num">1.00000</td></tr></tfoot>
+</table></div>
+<p><b>Why this order.</b> Implementation leverage leads because a criterion that changes nothing is
+not worth a student's attention. Observability is second because an unreliable score is worse than
+no score. Recurrence prevention outranks transferability because preventing one repeat beats mild
+applicability everywhere. Rater cost is last but not negligible — at 0.144 it is what pushes
+expensive criteria out of the twelve.</p>
+</div>
+</details>
+
+<details>
+<summary>Stage 2 — the 20 × 5 decision matrix</summary>
+<div class="dbody">
+<p>This is the load-bearing judgement in the whole model, printed in full so it can be attacked
+directly. Scores 1–9 using the anchors in Table A1. M5 is minimised.</p>
+<div class="tcap"><span class="cid">Table A3 — matrix X</span>Expert scores. Change one cell and re-run the code below.</div><div class="tw"><table>
+<thead><tr><th>ID</th><th style="min-width:220px">Candidate criterion</th><th class="num">M1</th>
+<th class="num">M2</th><th class="num">M3</th><th class="num">M4</th><th class="num">M5 ↓</th></tr></thead>
+<tbody><tr><td class="id">C01</td><td>Actionability / atomicity</td><td class="num">9</td><td class="num">8</td><td class="num">8</td><td class="num">9</td><td class="num">4</td></tr><tr><td class="id">C02</td><td>Trigger specificity</td><td class="num">8</td><td class="num">8</td><td class="num">8</td><td class="num">8</td><td class="num">3</td></tr><tr><td class="id">C03</td><td>Tasking authority & action body named</td><td class="num">9</td><td class="num">9</td><td class="num">7</td><td class="num">8</td><td class="num">2</td></tr><tr><td class="id">C04</td><td>Contributing-factor depth</td><td class="num">7</td><td class="num">6</td><td class="num">8</td><td class="num">9</td><td class="num">6</td></tr><tr><td class="id">C05</td><td>Rival-explanation check</td><td class="num">6</td><td class="num">5</td><td class="num">7</td><td class="num">8</td><td class="num">7</td></tr><tr><td class="id">C06</td><td>Systemic framing (no individual blame)</td><td class="num">6</td><td class="num">6</td><td class="num">7</td><td class="num">7</td><td class="num">5</td></tr><tr><td class="id">C07</td><td>Evidence & source traceability</td><td class="num">7</td><td class="num">9</td><td class="num">8</td><td class="num">7</td><td class="num">3</td></tr><tr><td class="id">C08</td><td>Impact quantification</td><td class="num">6</td><td class="num">8</td><td class="num">8</td><td class="num">6</td><td class="num">4</td></tr><tr><td class="id">C09</td><td>Measurable success / validation test</td><td class="num">8</td><td class="num">8</td><td class="num">7</td><td class="num">8</td><td class="num">4</td></tr><tr><td class="id">C10</td><td>Context sufficiency</td><td class="num">6</td><td class="num">7</td><td class="num">9</td><td class="num">6</td><td class="num">3</td></tr><tr><td class="id">C11</td><td>Preventive + corrective completeness</td><td class="num">8</td><td class="num">7</td><td class="num">7</td><td class="num">8</td><td class="num">4</td></tr><tr><td class="id">C12</td><td>Process integration</td><td class="num">9</td><td class="num">7</td><td class="num">8</td><td class="num">8</td><td class="num">4</td></tr><tr><td class="id">C13</td><td>Retrievability / metadata</td><td class="num">6</td><td class="num">9</td><td class="num">7</td><td class="num">5</td><td class="num">2</td></tr><tr><td class="id">C14</td><td>Reusability without the author</td><td class="num">7</td><td class="num">6</td><td class="num">8</td><td class="num">6</td><td class="num">5</td></tr><tr><td class="id">C15</td><td>Duplicate & prior-lesson check</td><td class="num">5</td><td class="num">8</td><td class="num">6</td><td class="num">5</td><td class="num">3</td></tr><tr><td class="id">C16</td><td>Risk conversion</td><td class="num">7</td><td class="num">7</td><td class="num">7</td><td class="num">8</td><td class="num">4</td></tr><tr><td class="id">C17</td><td>Decision-rule / threshold clarity</td><td class="num">7</td><td class="num">8</td><td class="num">6</td><td class="num">7</td><td class="num">3</td></tr><tr><td class="id">C18</td><td>Stakeholder validation</td><td class="num">5</td><td class="num">6</td><td class="num">6</td><td class="num">5</td><td class="num">6</td></tr><tr><td class="id">C19</td><td>Positive / negative balance</td><td class="num">4</td><td class="num">7</td><td class="num">5</td><td class="num">4</td><td class="num">3</td></tr><tr><td class="id">C20</td><td>Reuse feedback loop to Lesson Learned</td><td class="num">8</td><td class="num">8</td><td class="num">6</td><td class="num">7</td><td class="num">6</td></tr></tbody></table></div>
+</div>
+</details>
+
+<details>
+<summary>Stage 3 — TOPSIS computation and full ranking</summary>
+<div class="dbody">
+<div class="fx"><span class="lbl">Computation</span>
+<em>r<sub>ij</sub></em> = <em>x<sub>ij</sub></em> / √(Σ<sub>i</sub> <em>x<sub>ij</sub></em>²) &nbsp;·&nbsp;
+<em>v<sub>ij</sub></em> = <em>w<sub>j</sub></em>·<em>r<sub>ij</sub></em><br>
+<em>A⁺<sub>j</sub></em> = max for benefit / min for cost &nbsp;·&nbsp; <em>A⁻<sub>j</sub></em> = the converse<br>
+<em>d<sub>i</sub>±</em> = √(Σ<sub>j</sub>(<em>v<sub>ij</sub></em>−<em>A±<sub>j</sub></em>)²) &nbsp;·&nbsp;
+<b><em>C*<sub>i</sub></em> = <em>d<sub>i</sub>⁻</em>/(<em>d<sub>i</sub>⁺</em>+<em>d<sub>i</sub>⁻</em>)</b>
+<br><br><span class="lbl">Normalisation denominators √Σx²</span>
+M1 31.4643 · M2 33.2415 · M3 32.2645 · M4 31.7017 · M5 19.1050<br>
+<span class="lbl" style="margin-top:8px">Weighted ideal / anti-ideal</span>
+A⁺ = [0.07163 · 0.06164 · 0.05020 · 0.05620 · 0.01507]<br>A⁻ = [0.03184 · 0.03424 · 0.02789 · 0.02498 · 0.05275]
+</div>
+<div class="tcap"><span class="cid">Table A4 — full ranking</span>Amber = tie band, positions 10–14</div><div class="tw"><table>
+<thead><tr><th class="num">#</th><th>ID</th><th style="min-width:240px">Criterion</th>
+<th class="num">d⁺</th><th class="num">d⁻</th><th class="num">C*</th><th class="num">w (top 12)</th></tr></thead>
+<tbody><tr><td class="num">1</td><td class="id">C03</td><td>Tasking authority & action body named</td><td class="num">0.01278</td><td class="num">0.06710</td><td class="num"><b>0.8400</b></td><td class="num"><b>0.1035</b></td></tr><tr><td class="num">2</td><td class="id">C02</td><td>Trigger specificity</td><td class="num">0.01540</td><td class="num">0.05699</td><td class="num"><b>0.7873</b></td><td class="num"><b>0.0970</b></td></tr><tr><td class="num">3</td><td class="id">C01</td><td>Actionability / atomicity</td><td class="num">0.01747</td><td class="num">0.06142</td><td class="num"><b>0.7785</b></td><td class="num"><b>0.0959</b></td></tr><tr><td class="num">4</td><td class="id">C12</td><td>Process integration</td><td class="num">0.02202</td><td class="num">0.05645</td><td class="num"><b>0.7194</b></td><td class="num"><b>0.0886</b></td></tr><tr><td class="num">5</td><td class="id">C07</td><td>Evidence & source traceability</td><td class="num">0.02230</td><td class="num">0.05348</td><td class="num"><b>0.7057</b></td><td class="num"><b>0.0870</b></td></tr><tr><td class="num">6</td><td class="id">C09</td><td>Measurable success / validation test</td><td class="num">0.02238</td><td class="num">0.05192</td><td class="num"><b>0.6988</b></td><td class="num"><b>0.0861</b></td></tr><tr><td class="num">7</td><td class="id">C11</td><td>Preventive + corrective completeness</td><td class="num">0.02533</td><td class="num">0.04961</td><td class="num"><b>0.6620</b></td><td class="num"><b>0.0816</b></td></tr><tr><td class="num">8</td><td class="id">C17</td><td>Decision-rule / threshold clarity</td><td class="num">0.02816</td><td class="num">0.04778</td><td class="num"><b>0.6292</b></td><td class="num"><b>0.0775</b></td></tr><tr><td class="num">9</td><td class="id">C16</td><td>Risk conversion</td><td class="num">0.02884</td><td class="num">0.04491</td><td class="num"><b>0.6090</b></td><td class="num"><b>0.0750</b></td></tr><tr class="hl"><td class="num">10</td><td class="id">C13</td><td>Retrievability / metadata</td><td class="num">0.03631</td><td class="num">0.05086</td><td class="num"><b>0.5835</b></td><td class="num"><b>0.0719</b></td></tr><tr class="hl"><td class="num">11</td><td class="id">C10</td><td>Context sufficiency</td><td class="num">0.03414</td><td class="num">0.04476</td><td class="num"><b>0.5673</b></td><td class="num"><b>0.0699</b></td></tr><tr class="hl"><td class="num">12</td><td class="id">C08</td><td>Impact quantification</td><td class="num">0.03502</td><td class="num">0.04028</td><td class="num"><b>0.5350</b></td><td class="num"><b>0.0659</b></td></tr><tr class="hl"><td class="num">13</td><td class="id">C20</td><td>Reuse feedback loop to Lesson Learned</td><td class="num">0.03814</td><td class="num">0.04330</td><td class="num"><b>0.5316</b></td><td class="num" style="color:#8A9498">—</td></tr><tr class="hl"><td class="num">14</td><td class="id">C04</td><td>Contributing-factor depth</td><td class="num">0.04019</td><td class="num">0.04392</td><td class="num"><b>0.5222</b></td><td class="num" style="color:#8A9498">—</td></tr><tr><td class="num">15</td><td class="id">C14</td><td>Reusability without the author</td><td class="num">0.03961</td><td class="num">0.03578</td><td class="num"><b>0.4746</b></td><td class="num" style="color:#8A9498">—</td></tr><tr><td class="num">16</td><td class="id">C15</td><td>Duplicate & prior-lesson check</td><td class="num">0.04496</td><td class="num">0.03827</td><td class="num"><b>0.4598</b></td><td class="num" style="color:#8A9498">—</td></tr><tr><td class="num">17</td><td class="id">C06</td><td>Systemic framing (no individual blame)</td><td class="num">0.04224</td><td class="num">0.03167</td><td class="num"><b>0.4285</b></td><td class="num" style="color:#8A9498">—</td></tr><tr><td class="num">18</td><td class="id">C05</td><td>Rival-explanation check</td><td class="num">0.05389</td><td class="num">0.03165</td><td class="num"><b>0.3700</b></td><td class="num" style="color:#8A9498">—</td></tr><tr><td class="num">19</td><td class="id">C19</td><td>Positive / negative balance</td><td class="num">0.05745</td><td class="num">0.03311</td><td class="num"><b>0.3656</b></td><td class="num" style="color:#8A9498">—</td></tr><tr><td class="num">20</td><td class="id">C18</td><td>Stakeholder validation</td><td class="num">0.05699</td><td class="num">0.01540</td><td class="num"><b>0.2127</b></td><td class="num" style="color:#8A9498">—</td></tr></tbody>
+<tfoot><tr style="background:var(--panel2);font-weight:600"><td colspan="5" style="text-align:right;padding-right:10px">Σ C* across the selected twelve</td><td class="num">8.11570</td><td class="num">1.00000</td></tr></tfoot>
+</table></div>
+</div>
+</details>
+
+<details>
+<summary>Stage 4 — sensitivity analysis</summary>
+<div class="dbody">
+<p>Each meta-weight perturbed ±20%, plus an equal-weights scenario. A ranking whose stability is
+unknown cannot be defended.</p>
+<div class="tcap"><span class="cid">Table A5 — five scenarios</span></div><div class="tw"><table>
+<thead><tr><th style="min-width:100px">Scenario</th><th style="min-width:60px">Rank 1</th>
+<th class="num">Max shift</th><th style="min-width:88px">Top 12 stable</th><th style="min-width:210px">Positions 10–14</th></tr></thead>
+<tbody>
+<tr><td>Baseline</td><td class="id">C03</td><td class="num">—</td><td>—</td><td class="mono" style="font-size:11.5px">C13 · C10 · C08 · C20 · C04</td></tr>
+<tr><td>M5 −20%</td><td class="id">C03</td><td class="num">3</td><td><span class="v v-part">changes</span></td><td class="mono" style="font-size:11.5px">C20 · C13 · C04 · C10 · C08</td></tr>
+<tr><td>M5 +20%</td><td class="id">C03</td><td class="num">1</td><td><span class="v v-conf">stable</span></td><td class="mono" style="font-size:11.5px">unchanged</td></tr>
+<tr><td>M1 +20%</td><td class="id">C03</td><td class="num">2</td><td><span class="v v-part">changes</span></td><td class="mono" style="font-size:11.5px">C13 · C20 · C10 · C04 · C08</td></tr>
+<tr><td>M2 +20%</td><td class="id">C03</td><td class="num">1</td><td><span class="v v-conf">stable</span></td><td class="mono" style="font-size:11.5px">unchanged</td></tr>
+<tr><td>Equal weights</td><td class="id">C03</td><td class="num">4</td><td><span class="v v-conf">stable</span></td><td class="mono" style="font-size:11.5px">C10 · C16 · C08 · C15 · C04</td></tr>
+</tbody></table></div>
+<p><b>What this licenses:</b> C03 is rank 1 in every scenario. Positions 1–9 are stable. Positions
+10–14 form the tie band — substitute freely inside it; substituting outside requires re-running the
+matrix. <b>None of this is a measurement</b>; it is a property of the published judgement.</p>
+</div>
+</details>
+
+<details>
+<summary>Stage 5 — reproduction code</summary>
+<div class="dbody">
+<div class="fx" style="font-size:12px">
+<span style="color:#69777E"># SWARA, elicitation order M1 M2 M4 M3 M5</span><br>
+s = [None, 0.10, 0.15, 0.10, 0.25]<br>
+k = [1] + [1+x for x in s[1:]]; q = [1]<br>
+for kj in k[1:]: q.append(q[-1]/kj)<br>
+w = [qj/sum(q) for qj in q]<br><br>
+<span style="color:#69777E"># TOPSIS — X is Table A3, benefit = [1,1,1,1,0]</span><br>
+den = [sqrt(sum(x[j]**2 for x in X)) for j in range(5)]<br>
+V&nbsp;&nbsp;= [[x[j]/den[j]*w[j] for j in range(5)] for x in X]<br>
+Ap&nbsp;= [max(c) if b else min(c) for c,b in zip(zip(*V), benefit)]<br>
+Am&nbsp;= [min(c) if b else max(c) for c,b in zip(zip(*V), benefit)]<br>
+C&nbsp;&nbsp;= [dm/(dp+dm) for dp,dm in separations(V, Ap, Am)]<br><br>
+<span style="color:#69777E"># rubric weight after selection, and the index</span><br>
+w_i = C[i] / sum(C[k] for k in selected)<br>
+LQI = 100 * sum(w_i*score_i for i in selected) / 6
+</div>
+<p class="anchor">A standalone runnable version accompanies this document as
+<span class="mono">model_reproduction.py</span>.</p>
+</div>
+</details>
+
+<h3>Cross-checks not performed</h3>
+<ul>
+<li><b>Best-Worst Method</b> as a second weight elicitation, with input-based consistency
+thresholds — note these are criterion-count dependent, <i>not</i> the flat 0.10 that belongs to
+AHP.</li>
+<li><b>FUCOM</b> as a third, needing only n−1 comparisons.</li>
+<li><b>DEMATEL / ANP</b> to model the interdependence declared in ADR-16 rather than assuming it
+away.</li>
+<li><b>A second expert panel scoring Table A3 independently.</b> Cheapest and most valuable of the
+four.</li>
+</ul>
+</section>
+
+<!-- ================= B DECISION RECORDS ================= -->
+<section role="tabpanel" id="pB" aria-labelledby="bB">
+<h2>Decision records</h2>
+<p class="lead">Seventeen records in Nygard format. Every non-obvious design choice, and every
+change from the previous version, is here rather than scattered through the working sections.</p>
+<div class="adr"><div class="h"><span class="aid">ADR-01</span><span class="at">Treat the 20 criteria as alternatives in a selection decision</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Students must choose 8–12 criteria from a candidate pool. The pool members are therefore the objects being compared, and the qualities they are judged on are the decision criteria.</dd><dt>Decision</dt><dd>Rank the 20 candidates with TOPSIS against five meta-criteria. An earlier review of v1.0 called this a category error; that objection was wrong and is withdrawn.</dd><dt>Consequences</dt><dd>The method is standard. What v1.0 lacked was disclosure of the matrix, not a correct method.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-02</span><span class="at">Publish the entire derivation, and put it in the appendix</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>v1.0 presented weights and closeness coefficients with no matrix, no weights for the meta-criteria and no normalisation. They could not be reproduced or contested.</dd><dt>Decision</dt><dd>Publish every intermediate value, plus runnable code — in §A, behind collapsed panels, not in the sections people use.</dd><dt>Consequences</dt><dd>Anyone can attack one cell of the matrix and see what moves. Nobody has to read it to use the list.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-03</span><span class="at">Elicit meta-criteria weights with SWARA rather than AHP</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Twenty criteria in a single AHP cluster needs 190 pairwise comparisons and exceeds the seven-plus-or-minus-two limit AHP's own author defends. v1.0's published weights also summed to 0.995.</dd><dt>Decision</dt><dd>Use SWARA: n−1 judgements, each an adjacent-rank importance ratio. Weights sum to exactly 1.00000.</dd><dt>Consequences</dt><dd>Four disputable numbers (0.10, 0.15, 0.10, 0.25) generate the whole weight vector. Cross-checks with BWM and FUCOM remain open work.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-04</span><span class="at">Add rater cost as a fifth meta-criterion</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>v1.0's rationale named four qualities. An instrument that cannot be applied in the time available is not an instrument.</dd><dt>Decision</dt><dd>Add rater cost as a minimised criterion at weight 0.144.</dd><dt>Consequences</dt><dd>Expensive criteria drop out of the top twelve — intended behaviour. It is also what demotes contributing-factor depth to 14th, which was uncomfortable and was left standing.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-05</span><span class="at">Reduce the scored set from 20 to 12, with four binary gates</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Twenty scored judgements per entry exceeds reliable human capacity and invites halo and leniency effects.</dd><dt>Decision</dt><dd>Twelve weighted criteria plus five pass/fail gates.</dd><dt>Consequences</dt><dd>Same coverage at lower load. If two or more criteria still fail agreement in a pilot, cut to eight rather than patching anchors.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-06</span><span class="at">One 0–6 scale, with a crosswalk to the old scales</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>v1.0 used 0–5 in one place and 1–10 in another, unreconciled. Rater reliability stops improving at around seven response categories.</dd><dt>Decision</dt><dd>Adopt seven points, 0–6, with behavioural anchors. Crosswalk: 0→0/1 · 1→1/2–3 · 2→2/4 · 3→3/5–6 · 4→4/7 · 5→5/8–9 · 6→5+/10.</dd><dt>Consequences</dt><dd>Conversion is ordinal. Convert to compare cohorts; never average across scales.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-07</span><span class="at">Rank tasking authority first, ahead of actionability</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Actionability makes a lesson executable; only a role that can commit resources makes it executed. The field is also directly checkable, so it scores 9 on observability at a cost of 2.</dd><dt>Decision</dt><dd>C03 becomes the highest-weighted criterion and register column 21 becomes mandatory.</dd><dt>Consequences</dt><dd>Wins on benefit and cost simultaneously under every sensitivity scenario tested. Absent from v1.0 in any form.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-08</span><span class="at">Reframe root cause as contributing factors, and gate it rather than score it</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>The published critique of the five-whys approach is direct: it forces a single analytical pathway, insists on one root cause, and is popular without evidence of effectiveness. The model also ranks causal depth 14th because raters disagree about it.</dd><dt>Decision</dt><dd>Split into C04 (contributing factors), C05 (rival explanations), C06 (systemic framing) — and move the binding requirement into gate G5, judged once by a reviewer.</dd><dt>Consequences</dt><dd>Causal quality is not dropped, it is relocated to where it can be applied reliably. Three criteria replace one.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-09</span><span class="at">Withdraw the "about 40 rows" threshold</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>No empirical or standards basis for the number was located. The underlying intuition — findability degrades as an unstructured list grows — is sound.</dd><dt>Decision</dt><dd>Replace with a structure trigger: adopt a controlled vocabulary the first time anyone needs to retrieve by attribute rather than by scrolling.</dd><dt>Consequences</dt><dd>The rule now fires at the right moment regardless of size.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-10</span><span class="at">Build the taxonomy to a standard instead of inventing one</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>"Invent taxonomy" was v1.0's own example of a non-atomic action, and the verb was also wrong.</dd><dt>Decision</dt><dd>Build register column 8 to ANSI/NISO Z39.19 or ISO 25964, faceted rather than hierarchical, with a ten-entry tagging test.</dd><dt>Consequences</dt><dd>Lessons are multi-dimensional by nature; a single hierarchy forces false choices.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-11</span><span class="at">Keep the two lists strictly separate</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>The 20 scoring criteria and the 30 register columns serve different moments and different purposes. Merging them, or presenting one as a subset of the other, destroys both.</dd><dt>Decision</dt><dd>§01 is scoring only. §02 is capture only. §03 states the relationship explicitly and shows the one legitimate crossing point.</dd><dt>Consequences</dt><dd>Only three genuine couplings exist: validation evidence in column 32 raises C09 and C20; the facets in column 8 are what C13 scores; the trigger in column 18 is what C02 scores. Everything else is independent.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-12</span><span class="at">Make the scoring list a self-assessment and gamification instrument first</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>The purpose is students scoring their own existing lessons and optimising the number. An earlier draft of this rebuild treated it primarily as an instructor grading rubric, which is a different tool with different obligations.</dd><dt>Decision</dt><dd>Front the self-scoring loop, the level bands and the quick-win order. Move peer scoring and the reliability protocol to an option and to ADR-14.</dd><dt>Consequences</dt><dd>This corrected a real misreading. The instrument is formative unless someone deliberately promotes it to summative.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-13</span><span class="at">Renormalise weights after selection using C*</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Weights elicited across 20 candidates are not valid over a chosen subset of 12, and v1.0 gave no rule.</dd><dt>Decision</dt><dd>w = C* ÷ (sum of C* across the selected set). The C* column is published for exactly this.</dd><dt>Consequences</dt><dd>Any 8–12 subset becomes immediately usable, and the choice remains the student's.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-14</span><span class="at">Do not attach marks to the score without a reliability pilot</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Rubrics improve reliability when analytic, topic-specific and accompanied by exemplars and rater training — but they do not confer validity by existing. No reliability data exists for this instrument.</dd><dt>Decision</dt><dd>Formative use is unrestricted. Before any mark depends on the score: freeze the instrument, build 20–30 exemplars covering every anchor level, train two or more raters, compute ICC(2,k) and Krippendorff's α, and require ICC(2,k) ≥ 0.75 (below 0.50 unusable, 0.50–0.75 formative only).</dd><dt>Consequences</dt><dd>This is the one obligation that cannot be waived. It is stated here rather than on the front page because it constrains a use most readers will not make.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-15</span><span class="at">Adopt the two-phase process with an endorsement gate</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>v1.0 had no process at all. Converging peer-reviewed evidence says lessons are identified and not learned, and no trial-grade evidence was found that registers improve outcomes. The positive causal evidence attaches to structured debriefs and to if-then action formats.</dd><dt>Decision</dt><dd>Adopt the published two-phase, six-step lessons process with an explicit Lesson Identified → Lesson Learned gate, a nine-state status machine and named authorities.</dd><dt>Consequences</dt><dd>Shifts the centre of gravity from documentation quality to execution. Doctrine vocabulary is renamed to PM equivalents; if students find it obstructive, keep the structure and rename the artefacts.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-16</span><span class="at">Tolerate additive aggregation over interdependent criteria, and declare it</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>Actionability, trigger clarity and decision-rule clarity plainly overlap, which strains the additive-independence assumption.</dd><dt>Decision</dt><dd>Retain the additive form for tractability; merge the most redundant candidates during reconciliation; declare the dependency rather than conceal it.</dd><dt>Consequences</dt><dd>If pairwise criterion correlations in pilot data exceed roughly r = .8, move to ANP or a Choquet-integral aggregation.</dd></dl></div></div><div class="adr"><div class="h"><span class="aid">ADR-17</span><span class="at">Source standards claims only from standards</span><span class="v v-conf">Accepted</span></div><div class="b"><dl><dt>Context</dt><dd>v1.0 supported claims about PMBOK, PRINCE2 and PM² with a journal proxy, a training vendor's site, a wiki and forum posts, when free primary documents exist for all three.</dd><dt>Decision</dt><dd>Every standards claim now cites the standard or its publisher. Practitioner sources are retained only for claims about practitioner experience and are tiered as such.</dd><dt>Consequences</dt><dd>No tier-3 or tier-4 source carries a standards claim anywhere in this document.</dd></dl></div></div>
+
+<h3>Change register</h3>
+<div class="tcap"><span class="cid">Table B1</span>Disposition of every component of the previous version</div><div class="tw"><table>
+<thead><tr><th style="min-width:180px">v1.0 component</th><th style="min-width:106px">Disposition</th>
+<th style="min-width:290px">Reason</th><th style="min-width:74px">See</th></tr></thead>
+<tbody>
+<tr><td>Direct-answers set</td><td><span class="v v-conf">KEPT + 2 ADDED</span></td><td>Verified against primary standards; two questions added on authority and on identified-versus-learned.</td><td class="id">§00, §05</td></tr>
+<tr><td>Supporting / contradicting methods</td><td><span class="v v-conf">KEPT + 4 ADDED</span></td><td>Added debrief evidence, implementation intentions, the single-root-cause critique and doctrine process.</td><td class="id">§C</td></tr>
+<tr><td>20 criteria, two conflicting tables</td><td><span class="v v-ref">MERGED</span></td><td>The two tables listed different criteria in different orders under identical weight and C* vectors.</td><td class="id">§01</td></tr>
+<tr><td>"AHP weights, Σw = 1.00"</td><td><span class="v v-ref">REPLACED</span></td><td>Summed to 0.995 and were assigned by rank position.</td><td class="id">ADR-03</td></tr>
+<tr><td>TOPSIS coefficients</td><td><span class="v v-part">RECOMPUTED</span></td><td>Method correct, numbers not derived.</td><td class="id">ADR-01</td></tr>
+<tr><td>0–5 and 1–10 scales</td><td><span class="v v-ref">RECONCILED</span></td><td>One instrument, one scale, with a crosswalk.</td><td class="id">ADR-06</td></tr>
+<tr><td>30-column register</td><td><span class="v v-conf">KEPT + 4 ADDED</span></td><td>All 30 retained and mapped; tasking authority, rival explanations, action plan link and releasability added.</td><td class="id">§02</td></tr>
+<tr><td>Student lesson template</td><td><span class="v v-part">RESTRUCTURED</span></td><td>Moved onto the ODCR spine with the authority field added.</td><td class="id">§04</td></tr>
+<tr><td>"~40 rows" rule</td><td><span class="v v-uns">WITHDRAWN</span></td><td>Unsourced.</td><td class="id">ADR-09</td></tr>
+<tr><td>Weak-entry correction</td><td><span class="v v-conf">KEPT + 2 ADDED</span></td><td>Retained in substance; two further worked corrections added.</td><td class="id">§04</td></tr>
+<tr><td>Default 8–12 list</td><td><span class="v v-part">RECOMPUTED</span></td><td>Now the computed top 12 with a renormalisation rule.</td><td class="id">ADR-13</td></tr>
+<tr><td>Blind-spot table</td><td><span class="v v-conf">EXPANDED</span></td><td>Three risks became eight, each with a change threshold.</td><td class="id">§C</td></tr>
+<tr><td>Wiki, forum and vendor citations</td><td><span class="v v-ref">REPLACED</span></td><td>Standards claims now cite standards.</td><td class="id">ADR-17</td></tr>
+<tr><td>—</td><td><span class="v v-gap">NEW</span></td><td>Landing page and index; process architecture; status machine; entry gates; level bands; quick-win order; sensitivity analysis; Potential Best Practice track; decision records.</td><td class="id">throughout</td></tr>
+</tbody></table></div>
+
+<h3>Version history</h3>
+<div class="tw"><table>
+<thead><tr><th style="min-width:66px">Version</th><th style="min-width:80px">Date</th><th style="min-width:330px">Change</th></tr></thead>
+<tbody>
+<tr><td class="id">1.0</td><td>2026-07-29</td><td>Original scoring-metrics draft. Twenty criteria with undisclosed weights, thirty register columns, student template, blind-spot table.</td></tr>
+<tr><td class="id">2.0</td><td>2026-07-29</td><td>Source audit and full derivation added; process architecture adopted. <b>Superseded:</b> led with the change log and the audit, buried the two lists, and mis-scoped the scoring list as an instructor grading rubric.</td></tr>
+<tr><td class="id">3.0</td><td>2026-07-29</td><td>Restructured around the two lists. Landing page and index added; derivation, audit and decision records moved to a second layer; self-scoring and gamification restored as the primary use; level bands and quick-win order added; two-layer sticky navigation.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ================= C SOURCE AUDIT ================= -->
+<section role="tabpanel" id="pC" aria-labelledby="bC">
+<h2>Source audit</h2>
+<p class="lead">Claim-by-claim verification of the material this toolkit was built on. Each claim
+was tested against four standing hypotheses — true as written, true but misattributed, false, or
+unfalsifiable — and disconfirming evidence was sought deliberately rather than incidentally. A
+claim supported only by evidence consistent with every hypothesis is recorded as unsubstantiated,
+not as true.</p>
+
+<div class="panel li">
+<h4>A correction made against my own earlier reading</h4>
+<p style="margin:0">An earlier review charged the original document with a category error for
+"ranking criteria with TOPSIS". <b>Withdrawn.</b> Where students select 8–12 criteria from a pool
+of 20, the criteria are the alternatives of a selection decision and TOPSIS applies normally. The
+method was right; only the disclosure failed. Recorded as ADR-01.</p>
+</div>
+
+<h3>Claim register</h3>
+<div class="tcap"><span class="cid">Table C1 — claim register</span>28 claims · verdict · discriminating and disconfirming evidence</div><div class="tw"><table>
+<thead><tr><th style="min-width:44px">ID</th><th style="min-width:220px">Claim in v1.0</th>
+<th style="min-width:118px">Verdict</th><th style="min-width:330px">Discriminating evidence &amp; disconfirming check</th>
+<th style="min-width:66px">Source</th></tr></thead>
+<tbody>
+
+<tr><td class="id">A1</td><td>PMBOK 8: Nov 2025, 408 pp, six principles, seven performance domains,
+processes reintroduced non-prescriptively</td><td><span class="v v-conf">CONFIRMED</span></td>
+<td>PMI's own standard page states six core principles, seven performance domains, expanded AI /
+PMO / procurement coverage and reintroduced process guidance in an evolved non-prescriptive form.
+<b>Disconfirming check:</b> the reasonable objection is that PMBOK 7 had twelve principles and
+eight domains, so "six/seven" looks like a fabrication — but the eighth edition consolidated
+them. The objection fails; the claim holds.</td><td class="id">B14</td></tr>
+
+<tr><td class="id">A2</td><td>PRINCE2 expects lessons to provoke action and gives quality criteria
+for the lessons log</td><td><span class="v v-part">PARTLY</span></td>
+<td>"Learn from experience" is a PRINCE2 principle and lessons are logged and reported. But the
+7th edition (2023) renamed Themes to Practices and simplified the management-product appendix,
+removing the per-product quality-criteria tables the 2017 edition carried. <b>Any quality-criteria
+claim must be attributed to the 2017 6th edition, not to PRINCE2 7.</b> v1.0 cited PRINCE2 through
+a third-party journal paper rather than the manual.</td><td class="id">B15</td></tr>
+
+<tr><td class="id">A3</td><td>PM² treats lessons and post-project recommendations as reusable
+knowledge; PSO repository; Project-End Report</td><td><span class="v v-conf">CONFIRMED</span></td>
+<td>The official EU methodology captures overall performance and lessons in the Project-End
+Report and includes a closing activity for lessons and post-project recommendations. v1.0 cited
+this through a training vendor's site; the EU Publications Office edition is free and
+authoritative.</td><td class="id">B16</td></tr>
+
+<tr><td class="id">A4</td><td>PMBOK 7 Measurement / Uncertainty / Tailoring support the design</td>
+<td><span class="v v-conf">CONFIRMED</span></td><td>Domain names and content are as described.
+Low-risk claim; no disconfirming evidence sought or found.</td><td class="id">B17</td></tr>
+
+<tr><td class="id">A5</td><td>—</td><td><span class="v v-gap">OMISSION</span></td>
+<td>v1.0 never mentions ISO. ISO 21502:2020 (project management guidance), ISO 30401:2018
+(knowledge management systems) and ISO 9001:2015 cl.&nbsp;7.5 (documented information) are the
+normative anchors for a lessons repository. <b>Declared limitation:</b> these are paywalled;
+relevance is established by scope and secondary citation, clause text was not retrieved.</td>
+<td class="id">B18–20</td></tr>
+
+<tr><td class="id">A6</td><td>—</td><td><span class="v v-gap">OMISSION</span></td>
+<td>The most developed operational LL system in open literature — a doctrine handbook explicitly
+written to be usable by any organisation, with a two-phase six-step process, an endorsement gate,
+named authorities and a status machine — is absent from v1.0 entirely. It is the backbone of §06.
+French joint doctrine independently codifies the same identified→learned path.</td>
+<td class="id">B01, B02</td></tr>
+
+<tr><td class="id">B1</td><td>Doran 1981 SMART = specific, measurable, assignable, realistic,
+time-related</td><td><span class="v v-conf">CONFIRMED</span></td>
+<td>Management Review 70(11), Nov 1981, pp. 35–36. The originals really are <b>assignable</b> and
+<b>realistic</b>, not the later "achievable/relevant". <b>Disconfirming evidence found and
+retained:</b> SMART is a checklist for goal <i>form</i>, is partly redundant (measurable subsumes
+specific), and has a thin evidence base compared with goal-setting theory. It should not carry
+the design alone — which is why B12 was added.</td><td class="id">B03, B04</td></tr>
+
+<tr><td class="id">B2</td><td>Rowe &amp; Sikes 2006 five-step process: identify, document,
+analyze, store, retrieve</td><td><span class="v v-conf">CONFIRMED</span></td>
+<td>PMI Global Congress 2006 North America. Steps and the relevance/retrievability emphasis are
+as stated.</td><td class="id">B05</td></tr>
+
+<tr><td class="id">B3</td><td>Dülgerler &amp; Negri 2016: lessons get lost in databases</td>
+<td><span class="v v-conf">CONFIRMED</span></td><td>PMI Global Congress EMEA 2016. Claim
+accurately represented.</td><td class="id">B07</td></tr>
+
+<tr><td class="id">B4</td><td>Paver &amp; Duffield 2019; "60% dissatisfaction (Milton 2010)";
+"only 11.7% followed process"</td><td><span class="v v-part">PROVENANCE CORRECTED</span></td>
+<td>The paper exists (JMPM 6(3):104–125). <b>Neither statistic is its own finding.</b> The
+dissatisfaction figure traces to <b>Nick</b> Milton 2010 (not David), whose survey reports ≈70
+respondents and "at least half" dissatisfied — the "60% of 74" pairing is the secondary rendering
+and could not be verbatim-confirmed. The 11.7% traces to Williams 2007/2008, n&nbsp;=&nbsp;522.
+<b>Critical base error to avoid:</b> 11.7% is a proportion of the 62.4% who had a formal
+procedure, not of all respondents. Quoting it as "11.7% of teams" overstates the failure.</td>
+<td class="id">B08–B10</td></tr>
+
+<tr><td class="id">B5</td><td>Jugdev 2012 on formal and informal project knowledge</td>
+<td><span class="v v-conf">CONFIRMED</span></td><td>Author and position accurately represented;
+lessons as strategic knowledge assets, tacit and explicit.</td><td class="id">B13</td></tr>
+
+<tr><td class="id">B6</td><td>After Action Review supports corrective action</td>
+<td><span class="v v-conf">CONFIRMED — AND UNDERUSED</span></td>
+<td>Doctrine and the four questions are as described. <b>The finding v1.0 missed:</b> a
+meta-analysis of 46 studies concludes that organisations can improve individual and team
+performance by roughly 20–25% through properly conducted debriefs, with larger effects when
+debriefs are structured and facilitated. This is the strongest causal evidence in the entire
+subject area and v1.0 does not cite it.</td><td class="id">B06</td></tr>
+
+<tr><td class="id">B7</td><td>PDCA/PDSA from Shewhart and Deming; Act/Adjust standardises
+improvement</td><td><span class="v v-part">CONFIRMED, NOT PRIMARY-VERIFIED</span></td>
+<td>Lineage is uncontroversial and Deming's preference for <i>Study</i> over <i>Check</i> is
+well documented. <b>Declared limitation:</b> primary text not retrieved in this pass.</td>
+<td class="id">B23</td></tr>
+
+<tr><td class="id">B8</td><td>—</td><td><span class="v v-gap">OMISSION</span></td>
+<td>Schindler &amp; Eppler 2003 distinguish process-based from documentation-based debriefing
+across nine multinationals and 46 expert interviews. Foundational; absent from v1.0.</td>
+<td class="id">B24</td></tr>
+
+<tr><td class="id">B9</td><td>—</td><td><span class="v v-gap">OMISSION</span></td>
+<td>Williams 2008 (IEEE TEM, n = 522) is the empirical study that produced the very statistic
+v1.0 quotes at second hand, and it was not cited.</td><td class="id">B09</td></tr>
+
+<tr><td class="id">B10</td><td>—</td><td><span class="v v-gap">OMISSION — SUPERIOR MODEL EXISTS</span></td>
+<td>The Syllk model (IJPM 2015) is a peer-reviewed, empirically tested organisational-learning
+model requiring alignment of people elements (learning, culture, social) with system elements
+(technology, process, infrastructure). Its finding indicts diary-style registers directly:
+identification functions while dissemination and application fail, producing a false impression
+that the process works.</td><td class="id">B25</td></tr>
+
+<tr><td class="id">B11</td><td>—</td><td><span class="v v-gap">OMISSION</span></td>
+<td>Argyris &amp; Schön (single/double-loop), Nonaka &amp; Takeuchi (SECI), Collison &amp; Parcell
+(Peer Assist, Retrospect, Learning Before/During/After) are the standard benchmarks for any
+lessons design. <b>Declared limitation:</b> confirmed by identity and standing, primary texts not
+re-retrieved.</td><td class="id">B26–B28</td></tr>
+
+<tr><td class="id">B12</td><td>—</td><td><span class="v v-gap">OMISSION — STRONGEST MISSING SUPPORT</span></td>
+<td>Implementation intentions ("if situation Y occurs, I will do Z") show a medium-to-large
+positive effect on goal attainment, d&nbsp;=&nbsp;.65 across 94 independent tests. This is
+precisely the trigger→action atom v1.0 advocates on intuition. Its omission left the document's
+central design choice unsupported when strong support was available.</td><td class="id">B12</td></tr>
+
+<tr><td class="id">B13</td><td>Root-cause depth via 5 Whys is a top-4 quality criterion</td>
+<td><span class="v v-part">CONTESTED — REFRAMED</span></td>
+<td>The published critique is direct: 5 Whys forces a single analytical pathway, insists on one
+root cause, assumes the most distal link matters most, and is popular without evidence of
+effectiveness. In a worked clinical example it addresses a small fraction of identified
+contributing factors. <b>Consequence for this instrument:</b> the criterion is reframed from
+"root cause" to <b>contributing-factor depth</b> with an explicit rival-explanation check, and
+the systemic-vs-individual framing is separated out as its own criterion. Named alternatives:
+CAST/STAMP, AcciMap, FRAM, blameless postmortem.</td><td class="id">B29–B31</td></tr>
+
+<tr><td class="id">C1</td><td>"AHP weights, expert-prioritized, Σw = 1.00"</td>
+<td><span class="v v-ref">REFUTED</span></td>
+<td>Three independent failures. <b>(i)</b> The published weights sum to <b>0.995</b>.
+<b>(ii)</b> No pairwise matrix, consistency ratio or panel composition is given, so the AHP label
+is unearned — the method's reproducibility conditions are unmet. <b>(iii)</b> Twenty elements in
+one comparison cluster requires 190 pairwise judgements and exceeds the seven-plus-or-minus-two
+limit its own author defends. Best-discriminated hypothesis: <b>H3</b>.</td><td class="id">B32, B33</td></tr>
+
+<tr><td class="id">C2</td><td>TOPSIS used to rank the twenty criteria</td>
+<td><span class="v v-conf">METHOD VALID — CHARGE WITHDRAWN</span></td>
+<td>Where the twenty criteria are candidates from which 8–12 are selected, they are alternatives
+and TOPSIS applies normally. The four qualities named in v1.0's rank-1 rationale — implementation
+impact, grading observability, IT-project transferability, defect-prevention leverage — are the
+meta-criteria. The design was sound; only the disclosure failed.</td><td class="id">B34</td></tr>
+
+<tr><td class="id">C3</td><td>The specific w and C* values</td>
+<td><span class="v v-ref">NOT DERIVED</span></td>
+<td>Tables 2 and 7 list <i>different</i> candidate sets in <i>different</i> orders yet carry
+<i>identical</i> w and C* vectors, and C* declines almost linearly at ~0.02 per rank. Different
+alternative sets scored against the same meta-criteria cannot produce identical closeness
+coefficients. The values track rank position, not data. v1.0's own risk table concedes the
+numbers are not from an empirical exercise, which corroborates rather than excuses.</td>
+<td class="id">§03</td></tr>
+
+<tr><td class="id">C4</td><td>Weights usable after students select 8–12 of 20</td>
+<td><span class="v v-ref">REFUTED — GAP</span></td>
+<td>Weights elicited across twenty criteria do not remain valid over a chosen subset of twelve;
+they must be renormalised, and no rule was given. §03 supplies
+<span class="mono">w<sub>i</sub> = C*<sub>i</sub> / Σ C*<sub>selected</sub></span>.</td>
+<td class="id">§03</td></tr>
+
+<tr><td class="id">C5</td><td>Criteria treated as independent and additively aggregated</td>
+<td><span class="v v-part">TOLERATED WITH DECLARATION</span></td>
+<td>Actionability, trigger clarity and decision-rule clarity plainly overlap, which strains
+additive independence. Correct treatments are ANP or a Choquet-integral fuzzy measure. For a
+classroom instrument the additive form is retained for tractability and the dependency is
+<i>declared</i> rather than concealed — and mitigated by reducing the scored set to twelve.</td>
+<td class="id">B35, B36</td></tr>
+
+<tr><td class="id">C6</td><td>0–5 scale in §1; 1–10 scale in Table B</td>
+<td><span class="v v-ref">REFUTED</span></td>
+<td>Two incompatible scales inside one instrument. Reliability evidence indicates gains flatten
+around seven points, so a single 0–6 behaviourally anchored scale is adopted, with a published
+crosswalk so prior cohort data remains comparable.</td><td class="id">B37, B38</td></tr>
+
+<tr><td class="id">C7</td><td>Twenty criteria scored per lesson</td>
+<td><span class="v v-part">REDUCED</span></td>
+<td>Twenty scored judgements per entry exceeds reliable human capacity and invites halo and
+leniency effects. Twelve scored criteria plus four binary gates carries the same coverage at
+lower rater load.</td><td class="id">B33, B39</td></tr>
+
+<tr><td class="id">C8</td><td>No inter-rater reliability evidence</td>
+<td><span class="v v-uns">UNSUBSTANTIATED — PROTOCOL SUPPLIED</span></td>
+<td>An instrument used to grade adults carries validity obligations. Rubrics improve reliability
+when analytic, topic-specific and accompanied by exemplars and rater training — but do not
+confer validity by themselves. Protocol with ICC(2,k) and Krippendorff's α targets is in §05.</td>
+<td class="id">B40–B43</td></tr>
+
+<tr><td class="id">D1</td><td>"If lessons exceed ~40 rows, treat the table as a knowledge base"</td>
+<td><span class="v v-uns">UNSUBSTANTIATED</span></td><td>No empirical or standards basis located.
+The intuition is sound, the number is arbitrary. Replaced by a structure trigger.</td>
+<td class="id">§08</td></tr>
+
+<tr><td class="id">D2</td><td>Taxonomy created ad hoc by the PM</td>
+<td><span class="v v-part">REPLACED BY STANDARD</span></td>
+<td>Controlled-vocabulary construction is standardised: ANSI/NISO Z39.19, ISO 25964, faceted
+classification, SKOS for machine-readable publication.</td><td class="id">B21, B22, B44</td></tr>
+
+<tr><td class="id">D3</td><td>Standards claims sourced from Wikipedia, Reddit and vendor blogs</td>
+<td><span class="v v-ref">SOURCING FAILURE</span></td>
+<td>PMBOK, PRINCE2 and PM² claims rested on tier-3 and tier-4 substitutes when free tier-2
+primaries exist for all three. Practitioner sources remain legitimate <i>only</i> for claims about
+practitioner experience, and are marked as such in §09.</td><td class="id">§09</td></tr>
+
+<tr><td class="id">D4</td><td>Lessons should be checklists / micro-SOPs</td>
+<td><span class="v v-conf">CONFIRMED — WITH A WARNING</span></td>
+<td>The best-named method for this is Training Within Industry Job Instruction and its Job
+Breakdown Sheet (important steps / key points / reasons), supported by hierarchical task
+analysis. <b>Disconfirming evidence retained:</b> checklist efficacy does not transfer
+automatically — a landmark surgical-checklist result was not reproduced at population scale in a
+later study. Efficacy depends on implementation fidelity, not on the artefact existing.</td>
+<td class="id">B45–B49</td></tr>
+
+<tr><td class="id">D5</td><td>Implicit: better registers produce learning</td>
+<td><span class="v v-ref">NOT SUPPORTED</span></td>
+<td>Converging peer-reviewed evidence says lessons are identified and not learned; no
+trial-grade evidence was found that lessons <i>registers</i> improve project outcomes. The
+positive causal evidence attaches to structured debriefs and to if-then action formats. This is
+the honest finding and it reorients the whole document toward §06.</td><td class="id">B06, B09, B12, B25</td></tr>
+
+</tbody></table></div>
+
+<h3>Supporting and contradicting positions</h3>
+<div class="tcap"><span class="cid">Table C2 — method survey</span>What supports the micro-SOP design, and what limits it</div><div class="tw"><table>
+<thead><tr><th style="min-width:150px">Position</th><th style="min-width:300px">Named methods and evidence</th>
+<th style="min-width:250px">Implication for this instrument</th></tr></thead>
+<tbody>
+<tr><td><b>Supports atomic actionable steps</b></td>
+<td>SMART (Doran 1981) — assignable and time-related in the original. After Action Review —
+planned vs actual, why, what to sustain or correct. Rowe &amp; Sikes five-step process stressing
+relevance and retrievability.</td>
+<td>Lessons must carry doable steps, not abstract advice.</td></tr>
+
+<tr><td><b>Supports the if-then form empirically</b> <span class="newtag">NEW</span></td>
+<td>Implementation intentions: 94 independent tests, d&nbsp;=&nbsp;.65 on goal attainment
+(Gollwitzer &amp; Sheeran 2006), building on Gollwitzer 1999.</td>
+<td>Trigger specificity is not stylistic preference. It is the mechanism. C02 is weighted
+accordingly.</td></tr>
+
+<tr><td><b>Supports the process over the artefact</b> <span class="newtag">NEW</span></td>
+<td>Debrief meta-analysis: ~20–25% performance improvement, 46 studies, larger when structured
+and facilitated (Tannenbaum &amp; Cerasoli 2013).</td>
+<td>Grade entries, but only inside a scheduled debrief cadence. A register without a debrief has
+no evidence behind it.</td></tr>
+
+<tr><td><b>Supports a continuous-improvement loop</b></td>
+<td>PDCA/PDSA from Shewhart and Deming, with Deming preferring <i>Study</i>. PMBOK 7 on ongoing
+learning, retrospectives and tailoring.</td>
+<td>Every lesson needs evidence of whether the action worked — the validation step, not just the
+recommendation.</td></tr>
+
+<tr><td><b>Supplies the missing authority chain</b> <span class="newtag">NEW</span></td>
+<td>Doctrine LL process: Originating Authority endorses → Tasking Authority approves or notes and
+commits resources → Action Body writes an Action Plan → validation → Lesson Learned.</td>
+<td>Adds C03 (tasking authority named) as rank-1 criterion, and the endorsement gate in §06.</td></tr>
+
+<tr><td><b>Contradicts over-atomisation</b></td>
+<td>PMBOK 7 on complexity, uncertainty and tailoring by context. PRINCE2 describes what needs
+doing, not every technique.</td>
+<td>For genuinely complex work, allow principle + experiment + decision rule instead of rigid
+steps. C17 scores the decision rule; C01 does not demand steps where steps are inappropriate.</td></tr>
+
+<tr><td><b>Contradicts single-root-cause thinking</b> <span class="newtag">NEW</span></td>
+<td>The 5 Whys critique (Card 2017); Safety-II and ETTO (Hollnagel); the new view of human error
+(Dekker); CAST/STAMP (Leveson).</td>
+<td>C04 asks for contributing factors, C05 for rival explanations, C06 for systemic rather than
+individual framing. Three criteria replace one.</td></tr>
+
+<tr><td><b>Contradicts "database = learning"</b></td>
+<td>Dülgerler &amp; Negri 2016 on lessons lost in databases. Paver &amp; Duffield 2019 on
+inconsistent and failing methods. Syllk (Duffield &amp; Whitty 2015): identification works,
+dissemination and application fail.</td>
+<td>Grade reuse, retrieval, ownership and implementation evidence — not documentation quality
+alone. C20 tracks the entry all the way to Lesson Learned.</td></tr>
+
+<tr><td><b>Contradicts artefact optimism</b> <span class="newtag">NEW</span></td>
+<td>Surgical-checklist evidence: large effect in the original multi-site study, no significant
+improvement in a later population-level study.</td>
+<td>Do not claim the instrument works because it exists. Pilot it and measure rater agreement
+(§05).</td></tr>
+</tbody></table></div>
+
+<h3>Risks in this document</h3>
+<div class="tcap"><span class="cid">Table C3 — risk register</span>Each risk carries the observation that would change the recommendation</div><div class="tw"><table>
+<thead><tr><th style="min-width:230px">Risk</th><th style="min-width:70px">Level</th>
+<th style="min-width:280px">Mitigation</th><th style="min-width:230px">Change threshold</th></tr></thead>
+<tbody>
+<tr><td>The meta-criteria scores in §03 are expert judgement, not measurement.</td><td>High</td>
+<td>The full matrix is published so the judgement can be contested line by line, and sensitivity
+analysis shows which ranks depend on it.</td>
+<td>If a second independent panel scores the matrix and the top-12 set changes, adopt the
+consensus matrix and republish.</td></tr>
+<tr><td>Additive aggregation over interdependent criteria.</td><td>Medium</td>
+<td>Dependency declared; scored set cut to twelve; overlapping candidates merged in the
+reconciliation.</td>
+<td>If pairwise criterion correlations in pilot data exceed r ≈ .8, move to ANP or a Choquet
+integral.</td></tr>
+<tr><td>No inter-rater reliability evidence yet exists for this instrument.</td><td>High</td>
+<td>Protocol in §05 with explicit targets; instrument marked "for classroom pilot", not
+"validated".</td>
+<td>ICC(2,k) &lt; 0.75 after rater training → cut criteria or rewrite anchors before further
+use.</td></tr>
+<tr><td>Standards move. PMBOK 8 is recent; PRINCE2 7 changed terminology.</td><td>Medium</td>
+<td>Every standards claim is edition-stamped in §09.</td>
+<td>Any new edition of PMBOK, PRINCE2, PM² or the LL doctrine handbook triggers a re-check of
+§01 Table 1 and §09.</td></tr>
+<tr><td>Paywalled ISO clause text was not retrieved.</td><td>Medium</td>
+<td>ISO items are cited for scope and relevance only, and are marked as not clause-verified.</td>
+<td>Obtain ISO 30401 and 21502; if the clauses conflict with §06 or §08, the standard wins.</td></tr>
+<tr><td>Two statistics in circulation carry base-rate errors.</td><td>Medium</td>
+<td>11.7% restated with its correct base; the Milton figure restated as "about half" with the
+n≈70 caveat.</td>
+<td>If the primary Milton survey instrument becomes available and reports 60% of 74, restore the
+original figures.</td></tr>
+<tr><td>No trial-grade evidence that lesson registers improve outcomes.</td><td>High</td>
+<td>Stated plainly in D5. Design weight shifted from register cosmetics to debrief cadence and
+action format.</td>
+<td>A controlled study showing register quality predicts project outcomes would justify
+re-weighting toward documentation criteria.</td></tr>
+<tr><td>Doctrine borrowed from a military setting into IT project teaching.</td><td>Low–Medium</td>
+<td>The source handbook is explicitly written to be relevant to any organisation; the roles are
+renamed to PM equivalents in §06.</td>
+<td>If students report the vocabulary obstructs use, keep the structure and rename the
+artefacts.</td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ================= D BIBLIOGRAPHY ================= -->
+<section role="tabpanel" id="pD" aria-labelledby="bD">
+<h2>Bibliography</h2>
+<p class="lead">Sixty-eight entries. Every one carries an evidence tier and a language. Links marked
+<i>opened</i> were retrieved and read during preparation; those marked <i>DOI</i> or <i>reference
+only</i> were not opened and are given so they can be checked. Where no open full text exists,
+that is stated rather than concealed.</p>
+
+<div class="panel steel">
+<p style="margin:0"><span class="t t1">T1</span> peer-reviewed academic ·
+<span class="t t2">T2</span> standards body, doctrine or primary institutional document ·
+<span class="t t3">T3</span> practitioner community, legitimate only for claims about practitioner
+experience · <span class="t t4">T4</span> vendor marketing, recorded but never load-bearing.
+<b>No T3 or T4 source carries a standards claim in this document</b> (ADR-17).</p>
+</div>
+<ol class="bib"><li><span class="bid">B01</span><div><div>NATO Joint Analysis and Lessons Learned Centre (2022). <i>The NATO Lessons Learned Handbook</i>, 4th ed., June 2022. ISBN 978-92-845-0188-5.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Primary source for §06, the ODCR template, both gate checklists, the status machine, the maturity levels and the capability model.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://nllp.jallc.nato.int/iks/sharing%20public/jallc_ll_handbook_update_-_4th_edition_final_14072022.pdf" target="_blank" rel="noopener">full text · opened</a></div></div></li><li><span class="bid">B01a</span><div><div>JALLC announcement page for the 4th edition.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Confirms edition and the statement that the handbook is written to be relevant to any organisation.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.jallc.nato.int/articles/4th-edition-nato-lessons-learned-handbook-available-now" target="_blank" rel="noopener">page · opened</a></div></div></li><li><span class="bid">B01b</span><div><div>JALLC (2016). <i>The NATO Lessons Learned Handbook</i>, 3rd ed. — mirrored by the French Ministry of Defence.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Earlier edition, useful for tracing how the process description evolved.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.defense.gouv.fr/sites/default/files/cicde/lessons_learned_handbook_3rd_edition.pdf" target="_blank" rel="noopener">full text · opened</a></div></div></li><li><span class="bid">B02</span><div><div>CICDE (2017). <i>Retour d'expérience des armées</i>, PIA-7.7(A)_RETEX(2017), 26 January 2017. ISBN 978-2-11-138556-6.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Independent French codification of the same observed-facts → leçons identifiées → leçons apprises path. Confirms the identified/learned gate is not a NATO idiosyncrasy.</div><div class="meta"><span class="t t2">T2</span><span class="lang">FR</span><a href="https://www.defense.gouv.fr/sites/default/files/cicde/20170126-NP-CICDE-PIA-7.7A-RETEX-2017.pdf" target="_blank" rel="noopener">full text · opened</a></div></div></li><li><span class="bid">B02a</span><div><div>Bibliothèque nationale de France catalogue record for PIA-7.7(A)_RETEX(2017).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Bibliographic confirmation of edition, pagination and ISBN.</div><div class="meta"><span class="t t2">T2</span><span class="lang">FR</span><a href="https://catalogue.bnf.fr/ark:/12148/cb45434013s" target="_blank" rel="noopener">record · opened</a></div></div></li><li><span class="bid">B02b</span><div><div>Ministère des Armées — <i>Tirer les leçons du passé</i> (RETEX organisation: CDEC, CCF, CICDE, BSRETEX).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Describes the RETEX network structure — the French equivalent of the staff-officer and points-of-contact roles in Table 10.</div><div class="meta"><span class="t t2">T2</span><span class="lang">FR</span><a href="https://www.defense.gouv.fr/terre/actualites/tirer-lecons-du-passe" target="_blank" rel="noopener">page · opened</a></div></div></li><li><span class="bid">B03</span><div><div>Doran, G. T. (1981). There's a S.M.A.R.T. way to write management's goals and objectives. <i>Management Review</i>, 70(11), 35–36.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Original SMART formulation: specific, measurable, <b>assignable</b>, <b>realistic</b>, time-related.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">no open full text located</span></div></div></li><li><span class="bid">B04</span><div><div>Ordóñez, L. D., Schweitzer, M. E., Galinsky, A. D. &amp; Bazerman, M. H. (2009). Goals gone wild. <i>Academy of Management Perspectives</i>, 23(1), 6–16.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Counter-evidence retained deliberately: goal specification has side effects, and SMART is not self-justifying.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.5465/amp.2009.37007999" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B05</span><div><div>Rowe, S. &amp; Sikes, M. (2006). Lessons learned: taking it to the next level. PMI Global Congress 2006 — North America.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Five-step process: identify, document, analyze, store, retrieve; relevance and retrievability.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.pmi.org/learning/library/lessons-learned-next-level-communicating-7991" target="_blank" rel="noopener">PMI library</a></div></div></li><li><span class="bid">B06</span><div><div>Tannenbaum, S. I. &amp; Cerasoli, C. P. (2013). Do team and individual debriefs enhance performance? A meta-analysis. <i>Human Factors</i>, 55(1), 231–245.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">46 studies. ~20–25% performance improvement from properly conducted debriefs. The strongest causal evidence in this subject area.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1177/0018720812448394" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B06a</span><div><div>Semantic Scholar record for Tannenbaum &amp; Cerasoli (2013).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Abstract and citation graph.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://www.semanticscholar.org/paper/Do-Team-and-Individual-Debriefs-Enhance-Performance-Tannenbaum-Cerasoli/1298d66c04a5e91afae5f1f7cce50945abb9cb8f" target="_blank" rel="noopener">record · opened</a></div></div></li><li><span class="bid">B07</span><div><div>Dülgerler, M. &amp; Negri, M. (2016). Lessons (really) learned? PMI Global Congress EMEA 2016.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Lessons get buried in databases and are not reused.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.pmi.org/learning/library/lessons-really-learned-forgotten-knowledge-10122" target="_blank" rel="noopener">PMI library</a></div></div></li><li><span class="bid">B08</span><div><div>Paver, M. &amp; Duffield, S. (2019). Project management lessons learned: 'The elephant in the room'. <i>Journal of Modern Project Management</i>, 6(3), 104–125.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">UK Freedom-of-Information multiple-case study. <b>Both circulating statistics are secondary citations here, not its own findings.</b></div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://jmpm.versita.com/index.php/jmpm/article/view/JMPM01807" target="_blank" rel="noopener">abstract · opened</a></div></div></li><li><span class="bid">B09</span><div><div>Williams, T. (2008). How do organizations learn lessons from projects — and do they? <i>IEEE Transactions on Engineering Management</i>, 55(2), 248–266.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">n = 522. 62.4% had a formal procedure; of those, 11.7% said it was closely adhered to. <b>Preserve that base when quoting.</b></div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1109/TEM.2007.912920" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B09a</span><div><div>ResearchGate record for Williams (2008).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Open abstract.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://www.researchgate.net/publication/3077089_How_Do_Organizations_Learn_Lessons_From_Projects-And_Do_They" target="_blank" rel="noopener">record · opened</a></div></div></li><li><span class="bid">B10</span><div><div>Williams, T. (2007). <i>Post-Project Reviews to Gain Effective Lessons Learned</i>. PMI.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Origin of the 11.7% figure.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B11</span><div><div>Milton, N. (2010). <i>The Lessons Learned Handbook: Practical Approaches to Learning from Experience</i>. Chandos. ISBN 978-1-84334-587-9.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Source of the three-stage model (identification, action, institutionalization) that B01 builds on, and of the dissatisfaction survey (n ≈ 70). <b>Nick</b> Milton, not David.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.sciencedirect.com/book/9781843345879/the-lessons-learned-handbook" target="_blank" rel="noopener">book · opened</a></div></div></li><li><span class="bid">B12</span><div><div>Gollwitzer, P. M. &amp; Sheeran, P. (2006). Implementation intentions and goal achievement: a meta-analysis of effects and processes. <i>Advances in Experimental Social Psychology</i>, 38, 69–119.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">94 independent tests, d = .65. The empirical basis for criterion C02 and for the if-then action format.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/S0065-2601(06)38002-1" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B12a</span><div><div>Gollwitzer, P. M. (1999). Implementation intentions: strong effects of simple plans. <i>American Psychologist</i>, 54(7), 493–503.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Original construct.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1037/0003-066X.54.7.493" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B13</span><div><div>Jugdev, K. (2012). Learning from lessons learned: project management research program. <i>American Journal of Economics and Business Administration</i>.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Lessons as strategic knowledge assets; formal and informal knowledge.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B14</span><div><div>Project Management Institute (2025). <i>A Guide to the Project Management Body of Knowledge (PMBOK Guide)</i>, 8th ed., November 2025.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Six principles, seven performance domains, five focus areas, ~408 pp, reintroduced non-prescriptive process guidance.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.pmi.org/standards/pmbok" target="_blank" rel="noopener">standard page</a></div></div></li><li><span class="bid">B15</span><div><div>PeopleCert / AXELOS (2023). <i>Managing Successful Projects with PRINCE2</i>, 7th ed.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Learn-from-experience principle; Themes renamed to Practices; management-product descriptions simplified. Quality-criteria claims belong to the 2017 6th edition.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.peoplecert.org/" target="_blank" rel="noopener">publisher</a></div></div></li><li><span class="bid">B16</span><div><div>European Commission (2021/2023). <i>PM² Project Management Methodology Guide</i>, v3.0.1 / v3.1.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Project-End Report captures performance and lessons; closing activity for lessons and post-project recommendations; PSO repository.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://op.europa.eu/" target="_blank" rel="noopener">EU Publications Office</a></div></div></li><li><span class="bid">B17</span><div><div>Project Management Institute (2021). <i>PMBOK Guide</i>, 7th ed.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Measurement, Uncertainty and other performance domains; tailoring.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.pmi.org/standards/pmbok" target="_blank" rel="noopener">standard page</a></div></div></li><li><span class="bid">B18</span><div><div>ISO 21502:2020 — Project, programme and portfolio management: guidance on project management.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Normative anchor absent from v1.0.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">paywalled · clause text not retrieved</span></div></div></li><li><span class="bid">B19</span><div><div>ISO 30401:2018 — Knowledge management systems: requirements.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The directly applicable standard for a lessons repository.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">paywalled · clause text not retrieved</span></div></div></li><li><span class="bid">B20</span><div><div>ISO 9001:2015, clause 7.5 — Documented information.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Governs control of the register as documented information.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">paywalled · clause text not retrieved</span></div></div></li><li><span class="bid">B21</span><div><div>ANSI/NISO Z39.19-2005 (R2010) — Guidelines for the Construction, Format and Management of Monolingual Controlled Vocabularies.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The standard that replaces "invent taxonomy".</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.niso.org/publications/ansiniso-z3919-2005-r2010" target="_blank" rel="noopener">NISO</a></div></div></li><li><span class="bid">B22</span><div><div>ISO 25964-1:2011 / -2:2013 — Thesauri and interoperability with other vocabularies.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Multilingual and interoperable vocabulary construction.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">paywalled</span></div></div></li><li><span class="bid">B23</span><div><div>Moen, R. &amp; Norman, C. Evolution of the PDCA cycle.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Shewhart → Deming lineage; Deming preferred Study over Check.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">reference only · not primary-verified</span></div></div></li><li><span class="bid">B24</span><div><div>Schindler, M. &amp; Eppler, M. J. (2003). Harvesting project knowledge: a review of project learning methods and success factors. <i>International Journal of Project Management</i>, 21(3), 219–228.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Process-based versus documentation-based debriefing; nine multinationals, 46 expert interviews.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/S0263-7863(02)00096-0" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B24a</span><div><div>University of St. Gallen repository record for Schindler &amp; Eppler (2003).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Institutional copy.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://www.alexandria.unisg.ch/entities/publication/c7296d55-527b-4525-bcd4-8feed6f5b2b3" target="_blank" rel="noopener">record · opened</a></div></div></li><li><span class="bid">B25</span><div><div>Duffield, S. &amp; Whitty, S. J. (2015). Developing a systemic lessons learned knowledge model for organisational learning through projects. <i>International Journal of Project Management</i>, 33(2), 311–324.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The Syllk model. People elements and system elements must align; identification works while dissemination and application fail.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/j.ijproman.2014.07.004" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B26</span><div><div>Argyris, C. &amp; Schön, D. A. (1978). <i>Organizational Learning: A Theory of Action Perspective</i>. Addison-Wesley.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Single-loop and double-loop learning.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B27</span><div><div>Nonaka, I. &amp; Takeuchi, H. (1995). <i>The Knowledge-Creating Company</i>. Oxford University Press.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">SECI model. Japanese knowledge-management tradition.</div><div class="meta"><span class="t t1">T1</span><span class="lang">JA/EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B28</span><div><div>Collison, C. &amp; Parcell, G. (2004). <i>Learning to Fly</i>, 2nd ed. Capstone.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">BP's Learning Before/During/After, Peer Assist, Retrospect, Knowledge Assets.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B29</span><div><div>Card, A. J. (2017). The problem with '5 whys'. <i>BMJ Quality &amp; Safety</i>, 26(8), 671–677.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Single analytical pathway; insists on one root cause; popular without evidence of effectiveness. Basis for reframing C04 and adding C05.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1136/bmjqs-2016-005849" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B29a</span><div><div>Patient Safety Learning hub summary of Card (2017).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Accessible summary of the argument.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.pslhub.org/learn/improving-patient-safety/improving-systems-of-care/quality-improvement/the-problem-with-%E2%80%985-whys%E2%80%99-september-2017-r1736/" target="_blank" rel="noopener">page · opened</a></div></div></li><li><span class="bid">B30</span><div><div>Dekker, S. (2014). <i>The Field Guide to Understanding 'Human Error'</i>, 3rd ed. Ashgate.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">New view of human error. Basis for gate G2 and criterion C06.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B31</span><div><div>Leveson, N. (2011). <i>Engineering a Safer World</i> (STAMP/CAST). MIT Press.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Systems-theoretic accident analysis: the named alternative to single-root-cause methods.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://direct.mit.edu/books/book/2908" target="_blank" rel="noopener">publisher</a></div></div></li><li><span class="bid">B31a</span><div><div>Hollnagel, E. (2009). <i>The ETTO Principle: Efficiency-Thoroughness Trade-Off</i>. Ashgate.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Safety-II framing; why work-as-done diverges from work-as-imagined.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B32</span><div><div>Miller, G. A. (1956). The magical number seven, plus or minus two. <i>Psychological Review</i>, 63(2), 81–97.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Capacity limit underlying both the AHP cluster-size critique and the reduction from 20 scored criteria to 12.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1037/h0043158" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B33</span><div><div>Saaty, T. L. &amp; Ozdemir, M. S. (2003). Why the magic number seven plus or minus two. <i>Mathematical and Computer Modelling</i>, 38(3–4), 233–244.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">AHP's own author on why comparison clusters must stay small. Twenty criteria in one level is indefensible.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/S0895-7177(03)90083-5" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B34</span><div><div>Hwang, C. L. &amp; Yoon, K. (1981). <i>Multiple Attribute Decision Making: Methods and Applications</i>. Springer.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">TOPSIS. Closeness coefficients are computed for the alternatives of a decision — which, in a criteria-selection problem, are the candidate criteria.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1007/978-3-642-48318-9" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B35</span><div><div>Gabus, A. &amp; Fontela, E. (1972). <i>World Problems, an Invitation to Further Thought within the Framework of DEMATEL</i>. Battelle Geneva.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">DEMATEL. The route to modelling the criterion interdependence declared in claim C5.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B36</span><div><div>Saaty, T. L. (1996). <i>Decision Making with Dependence and Feedback: The Analytic Network Process</i>. RWS.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">ANP. Correct treatment when additive independence fails.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B37</span><div><div>Preston, C. C. &amp; Colman, A. M. (2000). Optimal number of response categories in rating scales. <i>Acta Psychologica</i>, 104(1), 1–15.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Reliability gains flatten around seven points. Basis for the 0–6 scale.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/S0001-6918(99)00050-5" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B38</span><div><div>Krosnick, J. A. &amp; Presser, S. (2010). Question and questionnaire design. In <i>Handbook of Survey Research</i>.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Scale-point and anchoring guidance.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B39</span><div><div>Smith, P. C. &amp; Kendall, L. M. (1963). Retranslation of expectations: an approach to the construction of unambiguous anchors for rating scales. <i>Journal of Applied Psychology</i>, 47(2), 149–155.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Behaviourally anchored rating scales — the form Table B uses.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1037/h0047060" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B40</span><div><div>Jonsson, A. &amp; Svingby, G. (2007). The use of scoring rubrics: reliability, validity and educational consequences. <i>Educational Research Review</i>, 2(2), 130–144.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Reliability improves with analytic, topic-specific rubrics plus exemplars and rater training — but rubrics do not confer validity by themselves.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/j.edurev.2007.05.002" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B41</span><div><div>Koo, T. K. &amp; Li, M. Y. (2016). A guideline of selecting and reporting intraclass correlation coefficients for reliability research. <i>Journal of Chiropractic Medicine</i>, 15(2), 155–163.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">ICC(2,k) selection and the &lt;0.5 / 0.5–0.75 / 0.75–0.9 / &gt;0.9 interpretation bands used in Table B4.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/j.jcm.2016.02.012" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B42</span><div><div>Krippendorff, K. (2004). <i>Content Analysis: An Introduction to Its Methodology</i>, 2nd ed. Sage.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Krippendorff's α for ordinal agreement.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B43</span><div><div>Messick, S. (1995). Validity of psychological assessment. <i>American Psychologist</i>, 50(9), 741–749. / AERA, APA &amp; NCME (2014). <i>Standards for Educational and Psychological Testing</i>.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The obligations that attach to any instrument used to grade people.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1037/0003-066X.50.9.741" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B44</span><div><div>Denton, W. (2003). How to make a faceted classification and put it on the web.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Practical faceted-classification method for the register's taxonomy.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.miskatonic.org/library/facet-web-howto.html" target="_blank" rel="noopener">page</a></div></div></li><li><span class="bid">B45</span><div><div>Training Within Industry — Job Instruction and the Job Breakdown Sheet (US War Manpower Commission, 1944; TWI Institute).</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Important steps / key points / reasons. The best-named method for the "atomic manual" concept.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.twi-institute.com/" target="_blank" rel="noopener">institute</a></div></div></li><li><span class="bid">B46</span><div><div>Annett, J. &amp; Duncan, K. D. (1967). Task analysis and training design. <i>Occupational Psychology</i>, 41, 211–221.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Hierarchical task analysis, the formal parent of step decomposition.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B47</span><div><div>Stanton, N. A. (2006). Hierarchical task analysis: developments, applications and extensions. <i>Applied Ergonomics</i>, 37(1), 55–79.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Modern HTA practice.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/j.apergo.2005.06.003" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B48</span><div><div>Haynes, A. B. et al. (2009). A surgical safety checklist to reduce morbidity and mortality in a global population. <i>New England Journal of Medicine</i>, 360(5), 491–499.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The landmark positive checklist result.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1056/NEJMsa0810119" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B49</span><div><div>Urbach, D. R. et al. (2014). Introduction of surgical safety checklists in Ontario, Canada. <i>New England Journal of Medicine</i>, 370(11), 1029–1038.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The non-replication. Retained deliberately: artefacts do not work by existing.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1056/NEJMsa1308261" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B50</span><div><div>Keršulienė, V., Zavadskas, E. K. &amp; Turskis, Z. (2010). Selection of rational dispute resolution method by applying new step-wise weight assessment ratio analysis (SWARA). <i>Journal of Business Economics and Management</i>, 11(2), 243–258.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The weighting method used in Table 6. Vilnius Gediminas Technical University school.</div><div class="meta"><span class="t t1">T1</span><span class="lang">LT/EN</span><a href="https://doi.org/10.3846/jbem.2010.12" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B51</span><div><div>Rezaei, J. (2015). Best-worst multi-criteria decision-making method. <i>Omega</i>, 53, 49–57. / (2016) <i>Omega</i>, 64, 126–130.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Recommended cross-check on Table 6.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><a href="https://doi.org/10.1016/j.omega.2014.11.009" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B52</span><div><div>Liang, F., Brunelli, M. &amp; Rezaei, J. (2020). Consistency issues in the Best Worst Method: measurements and thresholds. <i>Omega</i>, 96, 102175.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Input-based, criterion-count-dependent thresholds. <b>Not</b> the flat 0.10 that belongs to AHP.</div><div class="meta"><span class="t t1">T1</span><span class="lang">EN</span><span class="anchor">reference only</span></div></div></li><li><span class="bid">B53</span><div><div>Pamučar, D., Stević, Ž. &amp; Sremac, S. (2018). A new model for determining weight coefficients of criteria in MCDM models: Full Consistency Method (FUCOM). <i>Symmetry</i>, 10(9), 393.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Only n−1 comparisons. Serbian school.</div><div class="meta"><span class="t t1">T1</span><span class="lang">RS/EN</span><a href="https://doi.org/10.3390/sym10090393" target="_blank" rel="noopener">DOI · open access</a></div></div></li><li><span class="bid">B54</span><div><div>Heuer, R. J. (1999). <i>Psychology of Intelligence Analysis</i>, ch. 8: Analysis of Competing Hypotheses. CIA Center for the Study of Intelligence.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">The discipline applied in §02 and the basis for criterion C05.</div><div class="meta"><span class="t t2">T2</span><span class="lang">EN</span><a href="https://www.cia.gov/resources/csi/books-monographs/psychology-of-intelligence-analysis-2/" target="_blank" rel="noopener">CIA CSI</a></div></div></li><li><span class="bid">B55</span><div><div>Ohara, S. (2005). <i>P2M: A Guidebook of Project and Program Management for Enterprise Innovation</i>. PMAJ, Tokyo. / Ohara, S. &amp; Asada, T. (2009). <i>Japanese Project Management: KPM</i>. World Scientific.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Japanese standard. The 3K cycle — kakushin, kaihatsu, kaizen — and hansei as structured reflection: a distinct tradition in which reflection is obligatory rather than optional.</div><div class="meta"><span class="t t2">T2</span><span class="lang">JA/EN</span><a href="https://doi.org/10.1142/6657" target="_blank" rel="noopener">DOI</a></div></div></li><li><span class="bid">B56</span><div><div>DIN 69901-5:2009 — Projektmanagement — Projektmanagementsysteme, Teil 5: Begriffe. / GPM Deutsche Gesellschaft für Projektmanagement.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">German process-model treatment of lessons and Wissensmanagement.</div><div class="meta"><span class="t t2">T2</span><span class="lang">DE</span><a href="https://www.gpm-ipma.de/" target="_blank" rel="noopener">GPM</a></div></div></li><li><span class="bid">B57</span><div><div>Pawlak, R. (2019/2020). Studies of lessons-learned knowledge management in Polish organisations. <i>E-mentor</i>, SGH Warsaw School of Economics.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Central-European empirical evidence on lessons-learned practice.</div><div class="meta"><span class="t t1">T1</span><span class="lang">PL</span><a href="https://econjournals.sgh.waw.pl/SiP/article/download/3091/2782" target="_blank" rel="noopener">full text · opened</a></div></div></li><li><span class="bid">B58</span><div><div>Zavadskas, E. K., Turskis, Z. &amp; Kildienė, S. (2014). State of art surveys of overviews on MCDM/MADM methods. <i>Technological and Economic Development of Economy</i>, 20(1), 165–179.</div><div style="color:#38454C;font-size:12.6px;margin-top:3px">Survey of the Vilnius school methods — COPRAS, ARAS, WASPAS, EDAS, SWARA, KEMIRA.</div><div class="meta"><span class="t t1">T1</span><span class="lang">LT/EN</span><a href="https://doi.org/10.3846/20294913.2014.892037" target="_blank" rel="noopener">DOI</a></div></div></li></ol>
+
+<h3>Declared limitations</h3>
+<div class="panel rej">
+<ul style="margin-bottom:0">
+<li><b>ISO standards (B18–B20, B22)</b> — paywalled. Cited for scope and relevance; clause text not
+retrieved. If a clause conflicts with §02 or §05, the standard wins.</li>
+<li><b>Doran 1981 (B03)</b> — no open full text located. The five original terms are corroborated
+across secondary sources but were not read in the original.</li>
+<li><b>PDCA lineage (B23)</b> — uncontroversial and widely corroborated; primary text not
+retrieved.</li>
+<li><b>B26–B28, B30, B35, B36, B38, B42, B46, B52</b> — confirmed by identity and standing; primary
+texts not re-retrieved.</li>
+<li><b>DOIs</b> were compiled during the research pass and not individually resolved. Spot-check
+before formal citation.</li>
+<li><b>The dissatisfaction figure</b> — the accessible text reports approximately 70 respondents and
+"at least half" dissatisfied. The circulated "60% of 74" pairing could not be verbatim-confirmed.
+This document uses the conservative form.</li>
+<li><b>The 11.7% figure</b> is a proportion of the 62.4% of respondents who had a formal procedure,
+not of all 522. Quoting it as "11.7% of teams" overstates the failure rate.</li>
+<li><b>Nothing here has been validated empirically.</b> The model in §A is a published judgement,
+not a measurement. The instrument in §01 has no reliability data — see ADR-14. Both statements are
+repeated here so neither can be quoted out of context.</li>
+</ul>
+</div>
+
+<h3>What would most improve version 4</h3>
+<ol>
+<li>Run the reliability pilot in ADR-14 and publish the ICC. Everything else is secondary.</li>
+<li>Have a second panel score Table A3 independently and reconcile the two matrices.</li>
+<li>Cross-check the SWARA weights with BWM using the correct thresholds.</li>
+<li>Obtain and read ISO 30401 and ISO 21502; reconcile §02 and §05 against them.</li>
+<li>Resolve the dissatisfaction-survey provenance from the primary book.</li>
+<li>Collect one cohort's before-and-after LQI scores. If the loop does not raise scores, the
+instrument is decoration and should be said to be.</li>
+</ol>
+
+<div class="foot">
+<p><b>LL-TK/3.1</b> · 2026-07-29 · supersedes LL-GI/2.0 and
+<span class="mono">Lessons_Learned_-_scoring_metrics_2026-07-29_01KV</span><br>
+Formative instrument. Not validated — see ADR-14. Metric units and ISO 8601 dates throughout.</p>
+</div>
+</section>
+</main>
+
+<script>
+(function(){
+  var l1=[].slice.call(document.querySelectorAll('nav.l1 button'));
+  var navs={g1:document.getElementById('g1nav'),g2:document.getElementById('g2nav')};
+  var tabs=[].slice.call(document.querySelectorAll('nav.l2 button'));
+  var panels=[].slice.call(document.querySelectorAll('[role=tabpanel]'));
+
+  function groupOf(btn){
+    return btn.closest('.ni').id==='g1nav'?'g1':'g2';
+  }
+  function showGroup(g,activateFirst){
+    l1.forEach(function(b){b.setAttribute('aria-selected', b.dataset.grp===g?'true':'false');});
+    Object.keys(navs).forEach(function(k){navs[k].classList.toggle('on',k===g);});
+    if(activateFirst){
+      var first=navs[g].querySelector('button');
+      showTab(tabs.indexOf(first));
+    }
+  }
+  function showTab(i,focus){
+    tabs.forEach(function(t,j){t.setAttribute('aria-selected',j===i?'true':'false');});
+    panels.forEach(function(p,j){p.classList.toggle('on',j===i);});
+    showGroupChrome(groupOf(tabs[i]));
+    if(focus){tabs[i].focus();}
+    window.scrollTo(0,0);
+    tabs[i].scrollIntoView({block:'nearest',inline:'nearest'});
+  }
+  function showGroupChrome(g){
+    l1.forEach(function(b){b.setAttribute('aria-selected', b.dataset.grp===g?'true':'false');});
+    Object.keys(navs).forEach(function(k){navs[k].classList.toggle('on',k===g);});
+  }
+  l1.forEach(function(b){
+    b.addEventListener('click',function(){showGroup(b.dataset.grp,true);});
+  });
+  tabs.forEach(function(t,i){
+    t.addEventListener('click',function(){showTab(i,false);});
+    t.addEventListener('keydown',function(e){
+      var vis=tabs.filter(function(x){return x.closest('.ni').classList.contains('on');});
+      var k=vis.indexOf(t),n=null;
+      if(e.key==='ArrowRight')n=(k+1)%vis.length;
+      if(e.key==='ArrowLeft')n=(k-1+vis.length)%vis.length;
+      if(e.key==='Home')n=0;
+      if(e.key==='End')n=vis.length-1;
+      if(n!==null){e.preventDefault();showTab(tabs.indexOf(vis[n]),true);}
+    });
+  });
+  document.querySelectorAll('[data-goto]').forEach(function(b){
+    b.addEventListener('click',function(){
+      var id=b.dataset.goto,i=panels.map(function(p){return p.id;}).indexOf(id);
+      if(i>-1)showTab(i,false);
+    });
+  });
+  var hash='';
+  try{hash=(location.hash||'').replace('#','');}catch(e){}
+  var idx=panels.map(function(p){return p.id;}).indexOf(hash);
+  showTab(idx>-1?idx:0,false);
+})();
+</script>
+</body>
+</html>
